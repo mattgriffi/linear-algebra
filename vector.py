@@ -15,10 +15,10 @@ class Vector:
         # If args is 1 argument, then assume that argument is an iterable
         # containing elements
         if len(args) == 1:
-            self.elements = list(args[0])
+            self.elements = tuple(args[0])
         # Otherwise, assume args is an iterable of elements
         else:
-            self.elements = list(args)
+            self.elements = tuple(args)
 
         self.non_zero = any(self.elements)
 
