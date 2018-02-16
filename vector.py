@@ -65,6 +65,9 @@ class Vector:
     def __floordiv__(self, k):
         return Vector(i // k for i in self)
 
+    def __neg__(self):
+        return -1 * self
+
     def __getitem__(self, index):
         return self.elements[index]
 

@@ -15,6 +15,8 @@ def main():
 
     b = [u, v, w]
 
+    print(-u)
+
     for vector in vmath.gs(b):
         print(vector)
 
