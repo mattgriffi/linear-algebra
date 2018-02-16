@@ -1,5 +1,4 @@
-"""
-This class defines a Euclidean vector. Vectors are immutable.
+"""This class defines a Euclidean vector. Vectors are immutable.
 """
 
 
@@ -10,6 +9,8 @@ ERROR = "Cannot {} vectors that are not of the same dimension."
 
 
 class DimensionError(ValueError):
+    """Raised when _check_length fails.
+    """
     pass
 
 
@@ -27,36 +28,84 @@ class Vector:
         self.non_zero = any(self.elements)
 
     def dimension(self):
+        """Returns the dimension of the Vector.
+        """
         return len(self)
 
     def dot(self, other):
+        """Performs the standard dot product with the given Vector.
+
+        Parameters
+        ----------
+        other : Vector
+            The Vector to dot this one with. Both Vectors' elements must define
+            addition and multiplication.
+
+        Returns
+        -------
+            The result of taking the dot product of the given Vector with this
+            one. This will be of whatever type is given by the multiplication
+            and subsequent addition of the Vectors' elements.
+
+        Raises
+        ------
+        DimensionError
+            If the Vectors' dimensions differ.
+        """
         self._check_length(other, "dot")
         if not self or not other:  # <u, O> = <O, u> = 0
             return 0
         return sum(i * j for i, j in zip(self, other))
 
     def norm(self):
+        """Returns the Euclidean norm.
+        """
         if not self:  # |O| = 0
             return 0
         return math.sqrt(self.norm2())
 
     def norm2(self):
+        """Returns the square of the Euclidean norm.
+        """
         if not self:  # |O|^2 = 0
             return 0
         return sum(i * i for i in self)
 
     def normalize(self):
+        """Returns the normalization of the Vector.
+        """
         if not self:
             return 0
         return self / self.norm()
 
     def project_onto(self, other):
+        """Projects this Vector onto the given one.
+
+        Parameters
+        ----------
+        other : Vector
+            The Vector to project this one onto.
+
+        Returns
+        -------
+        Vector
+            The result of projecting this Vector onto other.
+
+        Raises
+        ------
+        DimensionError
+            If the Vectors' dimensions differ.
+        ValueError
+            If other is the zero vector of the appropriate dimension.
+        """
         self._check_length(other, "project")
         if not other:
             raise ValueError("Cannot project onto a zero vector.")
         return other.dot(self) / other.norm2() * other
 
     def _check_length(self, other, message):
+        """Raises DimensionError if self and other differ in length.
+        """
         if len(other) != len(self):
             raise DimensionError(ERROR.format(message))
 
@@ -90,7 +139,8 @@ class Vector:
         return -1 * self
 
     def __bool__(self):
-        """The zero vector is False, any other vector is True."""
+        """The zero vector is False, any other vector is True.
+        """
         return self.non_zero
 
     def __getitem__(self, index):
