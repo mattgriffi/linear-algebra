@@ -9,7 +9,7 @@ ERROR = "Cannot {} vectors that are not of the same dimension."
 
 
 class DimensionError(ValueError):
-    """Raised when _check_length fails.
+    """Raised by functions that require Vectors of the same dimension.
     """
     pass
 
@@ -17,13 +17,19 @@ class DimensionError(ValueError):
 class Vector:
 
     def __init__(self, *args):
-        # If args is 1 argument, then assume that argument is an iterable
-        # containing elements
+        """An immutable Euclidean vector.
+
+        Parameters
+        ----------
+        *args
+            If a single argument is given, that argument should be an iterable
+            containing the elements of the Vector. If multiple arguments are
+            given, those arguments will be the elements of the Vector.
+        """
         if len(args) == 1:
             self.elements = tuple(args[0])
-        # Otherwise, assume args is an iterable of elements
         else:
-            self.elements = tuple(args)
+            self.elements = args
 
         self.non_zero = any(self.elements)
 
