@@ -9,6 +9,10 @@ import math
 ERROR = "Cannot {} vectors that are not of the same dimension."
 
 
+class DimensionError(ValueError):
+    pass
+
+
 class Vector:
 
     def __init__(self, *args):
@@ -54,7 +58,7 @@ class Vector:
 
     def _check_length(self, other, message):
         if len(other) != len(self):
-            raise ValueError(ERROR.format(message))
+            raise DimensionError(ERROR.format(message))
 
     def __len__(self):
         return len(self.elements)
