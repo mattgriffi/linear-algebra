@@ -22,6 +22,9 @@ class Vector:
 
         self.non_zero = any(self.elements)
 
+    def dimension(self):
+        return len(self)
+
     def dot(self, other):
         self._check_length(other, "dot")
         if not self or not other:  # <u, O> = <O, u> = 0
