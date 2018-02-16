@@ -12,6 +12,10 @@ def main():
     u = Vector(1, 0, 1)
     v = Vector(3, 1, 1)
     w = Vector(-1, -1, -1)
+    x = Vector(0, 0, 0)
+    y = Vector(0, 0, 1)
+
+    print(bool(x), bool(y))
 
     b = [u, v, w]
 

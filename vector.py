@@ -20,6 +20,8 @@ class Vector:
         else:
             self.elements = list(args)
 
+        self.non_zero = any(self.elements)
+
     def dot(self, other):
         return sum(i * j for i, j in zip(self, other))
 
@@ -67,6 +69,10 @@ class Vector:
 
     def __neg__(self):
         return -1 * self
+
+    def __bool__(self):
+        """The zero vector is False, any other vector is True."""
+        return self.non_zero
 
     def __getitem__(self, index):
         return self.elements[index]
