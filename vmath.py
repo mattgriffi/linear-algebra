@@ -11,7 +11,8 @@ def gs(vectors):
     for v in vectors:
         for p in new:
             v = v - v.project_onto(p)
-        new.append(v)
+        if v:  # do not include zero vectors
+            new.append(v)
     return normalize(new)
 
 
