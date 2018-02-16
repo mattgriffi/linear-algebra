@@ -51,7 +51,8 @@ class Vector:
         -------
             The result of taking the dot product of the given Vector with this
             one. This will be of whatever type is given by the multiplication
-            and subsequent addition of the Vectors' elements.
+            and subsequent addition of the Vectors' elements. Rounds to 15
+            decimal places.
 
         Raises
         ------
@@ -61,7 +62,9 @@ class Vector:
         self._check_length(other, "dot")
         if not self or not other:  # <u, O> = <O, u> = 0
             return 0
-        return sum(i * j for i, j in zip(self, other))
+        # Round the result to 15 decimal places, otherwise u.dot(v) == 0 can
+        # be False for some orthogonal vectors
+        return round(sum(i * j for i, j in zip(self, other)), 15)
 
     def norm(self):
         """Returns the Euclidean norm.
