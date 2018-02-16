@@ -11,8 +11,6 @@ ERROR = "Cannot %s vectors that are not of the same dimension."
 
 class Vector:
 
-    elements = []
-
     def __init__(self, *args):
         # If args is 1 argument, then assume that argument is an iterable
         # containing elements
