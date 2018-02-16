@@ -6,7 +6,7 @@ This class defines a Euclidean vector. Vectors are immutable.
 import math
 
 
-ERROR = "Cannot %s vectors that are not of the same dimension."
+ERROR = "Cannot {} vectors that are not of the same dimension."
 
 
 class Vector:
@@ -23,18 +23,30 @@ class Vector:
         self.non_zero = any(self.elements)
 
     def dot(self, other):
+        self._check_length(other, "dot")
+        if not self or not other:  # <u, O> = <O, u> = 0
+            return 0
         return sum(i * j for i, j in zip(self, other))
 
     def norm(self):
+        if not self:  # |O| = 0
+            return 0
         return math.sqrt(self.norm2())
 
     def norm2(self):
+        if not self:  # |O|^2 = 0
+            return 0
         return sum(i * i for i in self)
 
     def normalize(self):
+        if not self:
+            return 0
         return self / self.norm()
 
     def project_onto(self, other):
+        self._check_length(other, "project")
+        if not other:
+            raise ValueError("Cannot project onto a zero vector.")
         return other.dot(self) / other.norm2() * other
 
     def _check_length(self, other, message):
