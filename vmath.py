@@ -10,7 +10,7 @@ def gs(vectors):
     ----------
     vectors : iterable
         Input iterable of Vectors. These Vectors may be linearly dependent and
-        may include zero vectors.
+        may include zero Vectors.
 
     Returns
     -------
