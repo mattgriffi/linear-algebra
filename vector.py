@@ -106,7 +106,7 @@ class Vector:
         """Returns the normalization of the Vector.
         """
         if not self:
-            return 0
+            return self
         return self / self.norm()
 
     def project_onto(self, other):
