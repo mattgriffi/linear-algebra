@@ -3,6 +3,9 @@ with Vectors.
 """
 
 
+import itertools
+
+
 def gs(vectors):
     """Performs the Gram-Schmidt process.
 
@@ -49,3 +52,34 @@ def normalize(vectors):
         A new list of normalized Vectors.
     """
     return [v.normalize() for v in vectors]
+
+
+def are_orthogonal(vectors):
+    """Checks the given vectors for orthogonality.
+
+    Parameters
+    ----------
+    vectors
+        Input iterable of Vectors.
+
+    Returns
+    -------
+    bool
+        True if all Vectors in vectors are orthogonal to each other, otherwise
+        False. It must be possible to take the dot product of the Vectors.
+
+    Raises
+    ------
+    DimensionError
+        If any of the input Vectors differ in dimension.
+
+    Notes
+    -----
+    This checks the dot product of every pair of Vectors in the input. As such,
+    the time complexity is O(nv^2) where v is the number of vectors in the
+    input and n is the dimension of the vectors.
+    """
+    for u, v in itertools.combinations(vectors, 2):
+        if u.dot(v) != 0:
+            return False
+    return True

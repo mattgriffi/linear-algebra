@@ -9,14 +9,20 @@ from vector import Vector
 
 
 def main():
-    u = Vector(1, 0, 1)
-    v = Vector(3, 1, 1)
-    w = Vector(-1, -1, -1)
+    u = Vector(3, 0, 4, 2)
+    v = Vector(1, 2, 7, 0)
+    w = Vector(3, 2, -2, -5)
+    x = 2*w
 
-    b = [u, v, w]
+    b = [u, v, w, x]
 
-    for vector in vmath.gs(b):
+    bp = vmath.gs(b)
+
+    for vector in bp:
         print(vector)
+
+    print(vmath.are_orthogonal(bp))
+    print(vmath.are_orthogonal(b))
 
 
 if __name__ == "__main__":
