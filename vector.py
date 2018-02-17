@@ -26,12 +26,19 @@ class Vector:
             containing the elements of the Vector. If multiple arguments are
             given, those arguments will be the elements of the Vector.
         """
+        # Initialize self.elements from *args
         if len(args) == 1:
             self.elements = tuple(args[0])
         else:
             self.elements = args
 
-        self.non_zero = any(self.elements)
+        # Initialize self.non_zero
+        for e in self.elements:
+            if not math.isclose(e, 0, abs_tol=1e-15):
+                self.non_zero = True
+                break
+        else:
+            self.non_zero = False
 
     def dimension(self):
         """Returns the dimension of the Vector.
