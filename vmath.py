@@ -55,7 +55,7 @@ def normalize(vectors):
 
 
 def are_orthogonal(vectors):
-    """Checks the given vectors for orthogonality.
+    """Checks the given Vectors for orthogonality.
 
     Parameters
     ----------
@@ -81,5 +81,31 @@ def are_orthogonal(vectors):
     """
     for u, v in itertools.combinations(vectors, 2):
         if u.dot(v) != 0:
+            return False
+    return True
+
+
+def are_normal(vectors):
+    """Checks whether the given Vectors are normal.
+
+    Parameters
+    ----------
+    vectors
+        Input iterable of Vectors.
+
+    Returns
+    -------
+    bool
+        True if all Vectors in vectors are normal, otherwise False.
+
+    Notes
+    -----
+    This compares the norm of each vector to 1 with a tolerance of 15 decimal
+    places. It calls norm() on each Vector in vectors. As such, the time
+    complexity is O(nv) where v is the number of vectors in the input and n is
+    the dimension of the vectors.
+    """
+    for v in vectors:
+        if not v.is_normal():
             return False
     return True
