@@ -66,6 +66,21 @@ class Vector:
         # be False for some orthogonal vectors
         return round(sum(i * j for i, j in zip(self, other)), 15)
 
+    def is_normal(self):
+        """Determines whether this Vector is normal.
+
+        Returns
+        -------
+        bool
+            True if Vector is normal, otherwise False.
+
+        Notes
+        -----
+        This compares the norm of the vector to 1 with a tolerance of 15
+        decimal places.
+        """
+        return math.isclose(self.norm(), 1, abs_tol=1e-15)
+
     def norm(self):
         """Returns the Euclidean norm.
         """
