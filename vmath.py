@@ -6,7 +6,7 @@ with Vectors.
 import itertools
 
 
-def gs(vectors):
+def gs(vectors, normal=True):
     """Performs the Gram-Schmidt process.
 
     Parameters
@@ -14,6 +14,8 @@ def gs(vectors):
     vectors : iterable
         Input iterable of Vectors. These Vectors may be linearly dependent and
         may include zero Vectors.
+    normal : bool, optional
+        If True, the output will be normalized. Default True.
 
     Returns
     -------
@@ -30,12 +32,12 @@ def gs(vectors):
     for v in vectors:
         for p in new:
             v = v - v.project_onto(p)
-        if v:  # do not include zero vectors
+        if v:  # Do not include zero vectors
             new.append(v)
         # Any more vectors would be linearly dependent, so stop
         if len(new) == v.dimension():
             break
-    return normalize(new)
+    return normalize(new) if normal else new
 
 
 def normalize(vectors):
