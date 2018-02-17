@@ -45,7 +45,7 @@ def normalize(vectors):
 
     Parameters
     ----------
-    vectors
+    vectors : iterable
         Input iterable of Vectors.
 
     Returns
@@ -61,7 +61,7 @@ def are_orthogonal(vectors):
 
     Parameters
     ----------
-    vectors
+    vectors : iterable
         Input iterable of Vectors.
 
     Returns
@@ -92,7 +92,7 @@ def are_normal(vectors):
 
     Parameters
     ----------
-    vectors
+    vectors : iterable
         Input iterable of Vectors.
 
     Returns
