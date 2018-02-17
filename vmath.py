@@ -23,13 +23,15 @@ def gs(vectors):
     DimensionError
         If any of the input Vectors differ in dimension.
     """
-    # TODO make sure the output is linearly independent
     new = []
     for v in vectors:
         for p in new:
             v = v - v.project_onto(p)
         if v:  # do not include zero vectors
             new.append(v)
+        # Any more vectors would be linearly dependent, so stop
+        if len(new) == v.dimension():
+            break
     return normalize(new)
 
 
