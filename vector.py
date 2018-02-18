@@ -16,7 +16,7 @@ class DimensionError(ValueError):
 
 class Vector:
 
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """An immutable Euclidean vector.
 
         Parameters
@@ -25,9 +25,17 @@ class Vector:
             If a single argument is given, that argument should be an iterable
             containing the elements of the Vector. If multiple arguments are
             given, those arguments will be the elements of the Vector.
+        **kwargs
+        zero: int
+            If provided, a zero Vector of the given dimension will be
+            constructed. *args will be ignored.
+
         """
+        # Initialize to a zero vector if "zero" is given
+        if "zero" in kwargs:
+            self.elements = (0,) * kwargs["zero"]  # (0,) makes a tuple
         # Initialize self.elements from *args
-        if len(args) == 1:
+        elif len(args) == 1:
             self.elements = tuple(args[0])
         else:
             self.elements = args
