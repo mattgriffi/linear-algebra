@@ -48,17 +48,17 @@ def calculate_coefficients(orthonormal_basis, u):
 
     Parameters
     ----------
-    basis : iterable
+    orthonormal_basis : iterable
         Input iterable of Vectors. These Vectors must form an orthonormal
-        basis for the vector space of u.
+        basis for a vector space containing u.
     u : Vector
         The Vector to construct via a linear combination.
 
     Returns
     -------
     list
-        A list of the coefficients needed to construct u from basis. The
-        coefficients will be in the same order as the Vectors in basis.
+        A list of the coefficients needed to construct u from orthonormal_basis.
+        The coefficients will be in the same order as the Vectors in orthonormal_basis.
 
     Raises
     ------
@@ -67,7 +67,8 @@ def calculate_coefficients(orthonormal_basis, u):
 
     Notes
     -----
-    It must be possible to take the dot product of the Vectors in basis with u.
+    It must be possible to take the dot product of the Vectors in orthonormal_basis
+    with u.
     """
     return [u.dot(v) for v in orthonormal_basis]
 
@@ -79,7 +80,7 @@ def linear_combination(basis, coefficients):
     ----------
     basis : iterable
         Input iterable of Vectors.
-    coefficients : iterable, scalars
+    coefficients : iterable
         Input iterable of scalars.
 
     Returns
@@ -91,14 +92,7 @@ def linear_combination(basis, coefficients):
     ------
     DimensionError
         If any of the input Vectors differ in dimension.
-    ValueError
-        If basis and coefficients are not of the same length, or if either
-        iterable is empty.
     """
-    if len(basis) != len(coefficients):
-        raise ValueError("Bases and coefficients must match 1:1.")
-    if len(basis) == 0:
-        return ValueError("Cannot perform linear combination with empty basis.")
     n = basis[0].dimension()
     return sum((k * v for k, v in zip(coefficients, basis)), Vector(zero=n))
 
