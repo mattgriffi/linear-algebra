@@ -5,6 +5,8 @@ with Vectors.
 
 import itertools
 
+from vector import Vector
+
 
 def gs(vectors, normal=True):
     """Performs the Gram-Schmidt process.
@@ -38,6 +40,67 @@ def gs(vectors, normal=True):
         if len(new) == v.dimension():
             break
     return normalize(new) if normal else new
+
+
+def calculate_coefficients(orthonormal_basis, u):
+    """Calculates the coefficients needed for a linear combination of the Vectors
+    in orthonormal_basis to form the Vector u.
+
+    Parameters
+    ----------
+    basis : iterable
+        Input iterable of Vectors. These Vectors must form an orthonormal
+        basis for the vector space of u.
+    u : Vector
+        The Vector to construct via a linear combination.
+
+    Returns
+    -------
+    list
+        A list of the coefficients needed to construct u from basis. The
+        coefficients will be in the same order as the Vectors in basis.
+
+    Raises
+    ------
+    DimensionError
+        If any of the input Vectors differ in dimension.
+
+    Notes
+    -----
+    It must be possible to take the dot product of the Vectors in basis with u.
+    """
+    return [u.dot(v) for v in orthonormal_basis]
+
+
+def linear_combination(basis, coefficients):
+    """Performs a linear combination of basis using coefficients.
+
+    Parameters
+    ----------
+    basis : iterable
+        Input iterable of Vectors.
+    coefficients : iterable, scalars
+        Input iterable of scalars.
+
+    Returns
+    -------
+    Vector
+        A new Vector formed from the linear combination.
+
+    Raises
+    ------
+    DimensionError
+        If any of the input Vectors differ in dimension.
+    ValueError
+        If basis and coefficients are not of the same length, or if either
+        iterable is empty.
+    """
+    if len(basis) != len(coefficients):
+        raise ValueError("Bases and coefficients must match 1:1.")
+    if len(basis) == 0:
+        return ValueError("Cannot perform linear combination with empty basis.")
+    n = basis[0].dimension()
+    return sum((k * v for k, v in zip(coefficients, basis)), Vector(zero=n))
 
 
 def normalize(vectors):
