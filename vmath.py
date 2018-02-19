@@ -168,3 +168,19 @@ def are_normal(vectors):
         if not v.is_normal():
             return False
     return True
+
+
+def are_orthonormal(vectors):
+    """Checks whether the given Vectors are orthonormal.
+
+    Parameters
+    ----------
+    vectors : iterable
+        Input iterable of Vectors.
+
+    Returns
+    -------
+    bool
+        True if all Vectors in vectors are orthonormal, otherwise False.
+    """
+    return are_normal(vectors) and are_orthogonal(vectors)
