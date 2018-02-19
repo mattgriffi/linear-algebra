@@ -64,13 +64,17 @@ class Vector:
         return len(self.elements)
 
     def __eq__(self, other):
-        return self.elements == other.elements
+        return isinstance(other, Vector) and self.elements == other.elements
 
     def __add__(self, other):
+        if not isinstance(other, Vector):
+            return NotImplemented
         check_dimensions(self, other, "add")
         return Vector(i + j for i, j in zip(self, other))
 
     def __sub__(self, other):
+        if not isinstance(other, Vector):
+            return NotImplemented
         check_dimensions(self, other, "subtract")
         return Vector(i - j for i, j in zip(self, other))
 
