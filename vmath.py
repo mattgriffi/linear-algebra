@@ -4,8 +4,9 @@ with Vectors.
 
 
 import itertools
+import math
 
-from vector import Vector
+from vector import Vector, check_dimensions
 
 
 def gs(vectors, normal=True):
@@ -33,13 +34,114 @@ def gs(vectors, normal=True):
     new = []
     for v in vectors:
         for p in new:
-            v = v - v.project_onto(p)
+            check_dimensions(v, p, "perform the Gram-Schmidt process on")
+            v = v - project(v, p)
         if v:  # Do not include zero vectors
             new.append(v)
         # Any more vectors would be linearly dependent, so stop
         if len(new) == v.dimension():
             break
-    return normalize(new) if normal else new
+    return normalize_all(new) if normal else new
+
+
+def dot(u, v):
+        """Performs the standard dot product with the Vectors u and v,
+        defined as:
+        (u1)(v1) + (u2)(v2) + ... + (un)(vn)
+
+        Parameters
+        ----------
+        u : Vector
+        v : Vector
+
+        Returns
+        -------
+        type: scalar
+            The result of taking the dot product of u with v.
+            Rounds to 15 decimal places.
+
+        Raises
+        ------
+        DimensionError
+            If the Vectors' dimensions differ.
+        """
+        check_dimensions(u, v, "dot")
+        if not u or not v:  # <O, O> = <u, O> = <O, u> = 0
+            return 0
+        # Round the result to 15 decimal places, otherwise u.dot(v) == 0 can
+        # be False for some orthogonal vectors
+        return round(sum(i * j for i, j in zip(u, v)), 15)
+
+
+def is_normal(u):
+    """Determines whether u is normal.
+
+    Parameters
+    ----------
+    u : Vector
+
+    Returns
+    -------
+    bool
+        True if u is normal, otherwise False.
+
+    Notes
+    -----
+    This compares the norm of u to 1 with a tolerance of 15 decimal places.
+    """
+    return math.isclose(norm(u), 1, abs_tol=1e-15)
+
+
+def norm(u):
+    """Returns the Euclidean norm of the Vector u.
+    """
+    if not u:  # |O| = 0
+        return 0
+    return math.sqrt(norm2(u))
+
+
+def norm2(u):
+    """Returns the square of the Euclidean norm of the Vector u.
+    """
+    if not u:  # |O|^2 = 0
+        return 0
+    return sum(i * i for i in u)
+
+
+def normalize(u):
+    """Returns the normalization of the Vector u.
+    """
+    if not u:
+        return u
+    return u / norm(u)
+
+
+def project(v, u):
+    """Projects the Vector v onto u.
+
+    Parameters
+    ----------
+    v : Vector
+        The Vector to project.
+    u : Vector
+        The Vector to project onto
+
+    Returns
+    -------
+    Vector
+        The result of projecting v onto u.
+
+    Raises
+    ------
+    DimensionError
+        If the Vectors' dimensions differ.
+    ValueError
+        If u is the zero vector of the appropriate dimension.
+    """
+    check_dimensions(u, v, "project")
+    if not u:
+        raise ValueError("Cannot project onto a zero vector.")
+    return dot(u, v) / norm2(u) * u
 
 
 def calculate_coefficients(orthonormal_basis, u):
@@ -70,7 +172,7 @@ def calculate_coefficients(orthonormal_basis, u):
     It must be possible to take the dot product of the Vectors in orthonormal_basis
     with u.
     """
-    return [u.dot(v) for v in orthonormal_basis]
+    return [dot(u, v) for v in orthonormal_basis]
 
 
 def linear_combination(basis, coefficients):
@@ -97,7 +199,7 @@ def linear_combination(basis, coefficients):
     return sum((k * v for k, v in zip(coefficients, basis)), Vector(zero=n))
 
 
-def normalize(vectors):
+def normalize_all(vectors):
     """Normalizes the given Vectors.
 
     Parameters
@@ -110,7 +212,7 @@ def normalize(vectors):
     list
         A new list of normalized Vectors.
     """
-    return [v.normalize() for v in vectors]
+    return [normalize(v) for v in vectors]
 
 
 def are_orthogonal(vectors):
@@ -139,7 +241,7 @@ def are_orthogonal(vectors):
     input and n is the dimension of the vectors.
     """
     for u, v in itertools.combinations(vectors, 2):
-        if u.dot(v) != 0:
+        if dot(u, v) != 0:
             return False
     return True
 
@@ -165,7 +267,7 @@ def are_normal(vectors):
     the dimension of the vectors.
     """
     for v in vectors:
-        if not v.is_normal():
+        if not is_normal(v):
             return False
     return True
 
