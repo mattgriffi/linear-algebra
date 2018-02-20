@@ -7,7 +7,7 @@ import itertools
 import math
 
 
-from vector import Vector, check_dimensions
+from vector import Vector
 import vmath
 
 
@@ -18,6 +18,14 @@ class DimensionError(ValueError):
     """Raised by functions that require Matrices of the same dimension.
     """
     pass
+
+
+def check_dimensions(A, B, reason):
+    """Raises a DimensionError with the given reason if u and v are not
+    the same dimension.
+    """
+    if A.dimension() != B.dimension():
+        raise DimensionError(ERROR.format(reason))
 
 
 class Matrix:
@@ -56,12 +64,16 @@ class Matrix:
         pass
 
     def __add__(self, other):
-        # TODO be sure to check dimensions
-        pass
+        if not isinstance(other, Matrix):
+            return NotImplemented
+        check_dimensions(self, other, "add")
+        return Matrix(u + v for u, v in zip(self.columns, other.columns))
 
     def __sub__(self, other):
-        # TODO be sure to check dimensions
-        pass
+        if not isinstance(other, Matrix):
+            return NotImplemented
+        check_dimensions(self, other, "subtract")
+        return Matrix(u - v for u, v in zip(self.columns, other.columns))
 
     def __mul__(self, k):
         pass
