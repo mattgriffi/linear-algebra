@@ -41,12 +41,12 @@ class Vector:
         """
         # Initialize to a zero vector if "zero" is given
         if "zero" in kwargs:
-            self.elements = (0,) * kwargs["zero"]  # (0,) makes a tuple
+            self.elements = (0.0,) * kwargs["zero"]  # (0,) makes a tuple
         # Initialize self.elements from *args
         elif len(args) == 1:
-            self.elements = tuple(args[0])
+            self.elements = tuple(map(float, args[0]))
         else:
-            self.elements = args
+            self.elements = tuple(map(float, args))
 
         # Initialize self.non_zero
         self.non_zero = any(not math.isclose(e, 0, abs_tol=1e-15) for e in self.elements)
