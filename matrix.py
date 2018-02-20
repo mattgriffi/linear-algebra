@@ -50,7 +50,7 @@ class Matrix:
     def dimension(self):
         """Returns the dimension of the Matrix as a tuple (rows, columns).
         """
-        return len(self)
+        return len(self.rows), len(self.columns)
 
     def __eq__(self, other):
         pass
