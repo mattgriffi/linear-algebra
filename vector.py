@@ -3,6 +3,7 @@
 
 
 import math
+import numbers
 
 
 ERROR = "Cannot {} vectors that are not of the same dimension."
@@ -74,6 +75,8 @@ class Vector:
         return Vector(i - j for i, j in zip(self, other))
 
     def __mul__(self, k):
+        if not issubclass(k.__class__, numbers.Real):
+            return NotImplemented
         return Vector(k * i for i in self)
 
     def __rmul__(self, k):
