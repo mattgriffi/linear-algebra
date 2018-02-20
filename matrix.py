@@ -75,20 +75,29 @@ class Matrix:
         check_dimensions(self, other, "subtract")
         return Matrix(u - v for u, v in zip(self.columns, other.columns))
 
-    def __mul__(self, k):
-        pass
+    def __mul__(self, other):
+        if isinstance(other, Vector):
+            # TODO implement matrix-vector multiplication
+            return NotImplemented
+        elif isinstance(other, Matrix):
+            # TODO implement matrix-matrix multiplication
+            return NotImplemented
+        else:
+            # Scalar multiplication
+            return Matrix(other * v for v in self.columns)
 
-    def __rmul__(self, k):
-        pass
+    def __rmul__(self, other):
+        # TODO implement for matrix-vector multiplication which is not commutative
+        return self * other
 
     def __truediv__(self, k):
-        pass
+        return (1 / k) * self
 
     def __floordiv__(self, k):
-        pass
+        return (1 // k) * self
 
     def __neg__(self):
-        pass
+        return -1 * self
 
     def __bool__(self):
         """The zero Matrix is False, any other Matrix is True.
