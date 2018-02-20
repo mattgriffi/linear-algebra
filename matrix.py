@@ -42,7 +42,7 @@ class Matrix:
             self.columns = args
 
         # Initialize row vectors from the column vectors
-        self.rows = tuple(Vector(x) for x in zip(self.columns))
+        self.rows = tuple(Vector(x) for x in zip(*self.columns))
 
         # It is a zero matrix if all of the column vectors are zero
         self.non_zero = any(bool(col) for col in self.columns)

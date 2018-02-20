@@ -3,26 +3,27 @@ This program allows for various linear algebra calculations.
 """
 
 
-import vmath
+import math
 
+import vmath
+from matrix import Matrix
 from vector import Vector
 
 
 def main():
-    u = Vector(3, 0, 4, 2)
-    v = Vector(1, 2, 7, 0)
-    w = Vector(3, 2, -2, -5)
-    x = 2*w
+    u = Vector(2, 2, 2)
+    v = Vector(-1, 0, -1)
+    w = Vector(-1, 2, 3)
 
-    b = [u, v, w, x]
+    s = (u, v, w)
 
-    bp = vmath.gs(b)
+    m = Matrix(s)
 
-    for vector in bp:
-        print(vector)
+    for col in m.columns:
+        print(col)
 
-    print(vmath.are_orthogonal(bp))
-    print(vmath.are_orthogonal(b))
+    for row in m.rows:
+        print(row)
 
 
 if __name__ == "__main__":
