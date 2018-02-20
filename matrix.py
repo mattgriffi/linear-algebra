@@ -7,7 +7,7 @@ from vector import Vector
 import vmath
 
 
-ERROR = "Cannot {} matrices that are not of the same dimension."
+ERROR = "Cannot {} matrices that are not of the appropriate dimension."
 
 
 class DimensionError(ValueError):
@@ -78,7 +78,9 @@ class Matrix:
             # TODO implement matrix-vector multiplication
             return NotImplemented
         elif isinstance(other, Matrix):
-            check_dimensions(self, other, "multiply")
+            # Self must have same number of columns as other has rows
+            if self.dimension()[1] != other.dimension()[0]:
+                raise DimensionError(ERROR.format("multiply"))
             return Matrix(Vector(vmath.dot(r, c) for r in self.rows) for c in other.columns)
         else:
             # Scalar multiplication
