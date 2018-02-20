@@ -61,7 +61,9 @@ class Matrix:
         return len(self.rows), len(self.columns)
 
     def __eq__(self, other):
-        pass
+        if not isinstance(other, Matrix) or self.dimension() != other.dimension():
+            return False
+        return all(u == v for u, v in zip(self.columns, other.columns))
 
     def __add__(self, other):
         if not isinstance(other, Matrix):
@@ -105,10 +107,13 @@ class Matrix:
         return self.non_zero
 
     def __getitem__(self, index):
-        pass
+        return self.rows[index]
 
     def __contains__(self, value):
-        pass
+        if isinstance(value, Vector):
+            return value in self.rows or value in self.columns
+        else:
+            return any(value in row for row in self.rows)
 
     def __str__(self):
         # TODO make it look pretty
