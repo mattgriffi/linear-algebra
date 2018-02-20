@@ -48,6 +48,10 @@ class Matrix:
         # Initialize row vectors from the column vectors
         self.rows = tuple(Vector(x) for x in zip(*self.columns))
 
+        if "transpose" in kwargs:
+            if kwargs["transpose"]:
+                self.rows, self.columns = self.columns, self.rows
+
         # It is a zero matrix if all of the column vectors are zero
         self.non_zero = any(bool(col) for col in self.columns)
 
