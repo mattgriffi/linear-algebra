@@ -33,17 +33,19 @@ class Matrix:
         """
         # Initialize to a zero matrix if "zero" is given
         if "zero" in kwargs:
-            # TODO implements zero matrix initialization
-            self.cs = (0,) * kwargs["zero"]  # (0,) makes a tuple
-        # Initialize self.cs from *args
+            # TODO implement zero matrix initialization
+            self.columns = (0,) * kwargs["zero"]  # (0,) makes a tuple
+        # Initialize columns vectors from *args
         elif len(args) == 1:
-            self.cs = tuple(args[0])
+            self.columns = tuple(args[0])
         else:
-            self.cs = args
+            self.columns = args
 
-        self.rs = tuple(Vector(x) for x in zip(self.cs))
+        # Initialize row vectors from the column vectors
+        self.rows = tuple(Vector(x) for x in zip(self.columns))
 
-        self.non_zero = any(bool(col) for col in self.cs)
+        # It is a zero matrix if all of the column vectors are zero
+        self.non_zero = any(bool(col) for col in self.columns)
 
     def dimension(self):
         """Returns the dimension of the Matrix as a tuple (rows, columns).
