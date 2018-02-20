@@ -52,11 +52,6 @@ class Matrix:
         """
         return len(self)
 
-    def __len__(self):
-        """Returns the dimension of the Matrix as a tuple (rows, columns).
-        """
-        pass
-
     def __eq__(self, other):
         pass
 
@@ -92,12 +87,6 @@ class Matrix:
         pass
 
     def __contains__(self, value):
-        pass
-
-    def __iter__(self):
-        pass
-
-    def __next__(self):
         pass
 
     def __str__(self):
