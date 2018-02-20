@@ -82,8 +82,7 @@ class Matrix:
             # TODO implement matrix-vector multiplication
             return NotImplemented
         elif isinstance(other, Matrix):
-            # TODO implement matrix-matrix multiplication
-            return NotImplemented
+            return Matrix(Vector(vmath.dot(r, c) for r in self.rows) for c in other.columns)
         else:
             # Scalar multiplication
             return Matrix(other * v for v in self.columns)
