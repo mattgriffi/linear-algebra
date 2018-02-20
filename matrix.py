@@ -78,6 +78,7 @@ class Matrix:
             # TODO implement matrix-vector multiplication
             return NotImplemented
         elif isinstance(other, Matrix):
+            check_dimensions(self, other, "multiply")
             return Matrix(Vector(vmath.dot(r, c) for r in self.rows) for c in other.columns)
         else:
             # Scalar multiplication
