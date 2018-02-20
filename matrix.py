@@ -31,9 +31,19 @@ class Matrix:
         **kwargs
 
         """
-        self.non_zero = False  # is it a zero Matrix?
-        self.rows = ()  # tuple of row Vectors
-        self.cols = ()  # tuple of column Vectors
+        # Initialize to a zero matrix if "zero" is given
+        if "zero" in kwargs:
+            # TODO implements zero matrix initialization
+            self.cs = (0,) * kwargs["zero"]  # (0,) makes a tuple
+        # Initialize self.cs from *args
+        elif len(args) == 1:
+            self.cs = tuple(args[0])
+        else:
+            self.cs = args
+
+        self.rs = tuple(Vector(x) for x in zip(self.cs))
+
+        self.non_zero = any(bool(col) for col in self.cs)
 
     def dimension(self):
         """Returns the dimension of the Matrix as a tuple (rows, columns).
