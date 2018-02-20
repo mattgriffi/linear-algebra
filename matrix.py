@@ -3,10 +3,6 @@ Matrices are immutable.
 """
 
 
-import itertools
-import math
-
-
 from vector import Vector
 import vmath
 
@@ -115,5 +111,6 @@ class Matrix:
             return any(value in row for row in self.rows)
 
     def __str__(self):
-        # TODO make it look pretty
-        pass
+        # Get the str of each row with a new line after every except the last
+        return "".join(str(r) + ("\n" if i < len(self.rows) - 1 else "")
+                       for i, r in enumerate(self.rows))

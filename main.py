@@ -32,8 +32,7 @@ def main():
 
     C = Ai * A
 
-    for c in C.rows:
-        print(c)
+    print(C)
 
 
 if __name__ == "__main__":

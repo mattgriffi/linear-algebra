@@ -109,4 +109,9 @@ class Vector:
         return next(self.elements)
 
     def __str__(self):
-        return str(self.elements)
+        # Create a string with each of the elements, rounded to four decimal
+        # places, left justified with up to 10 spaces of padding, with a blank
+        # before nonnegative numbers.
+        return "".join(
+            (("" if e < 0 else " ") + "{}").format(round(e, 4)).ljust(10) for e in self
+            )
