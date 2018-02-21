@@ -3,11 +3,15 @@ Matrices are immutable.
 """
 
 
+from collections import namedtuple
+
 from vector import Vector
 import vmath
 
 
 ERROR = "Cannot {} matrices that are not of the appropriate dimension."
+
+Dimension = namedtuple("Dimension", ("rows", "columns"))
 
 
 class DimensionError(ValueError):
@@ -20,7 +24,7 @@ def check_dimensions(A, B, reason):
     """Raises a DimensionError with the given reason if u and v are not
     the same dimension.
     """
-    if A.dimension() != B.dimension():
+    if A.dim != B.dim:
         raise DimensionError(ERROR.format(reason))
 
 
@@ -54,10 +58,8 @@ class Matrix:
         # It is a zero matrix if all of the row vectors are zero
         self.non_zero = any(bool(r) for r in self.rows)
 
-    def dimension(self):
-        """Returns the dimension of the Matrix as a tuple (rows, columns).
-        """
-        return len(self.rows), len(self.columns)
+        # Initialize dim to (rows, columns)
+        self.dim = Dimension(len(self.rows), len(self.columns))
 
     def __eq__(self, other):
         if not isinstance(other, Matrix) or self.dimension() != other.dimension():
@@ -82,7 +84,7 @@ class Matrix:
             return NotImplemented
         elif isinstance(other, Matrix):
             # Self must have same number of columns as other has rows
-            if self.dimension()[1] != other.dimension()[0]:
+            if self.dim.columns != other.dim.rows:
                 raise DimensionError(ERROR.format("multiply"))
             return Matrix(Vector(vmath.dot(r, c) for c in other.columns) for r in self.rows)
         else:
