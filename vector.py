@@ -44,7 +44,11 @@ class Vector:
             self.elements = (0.0,) * kwargs["zero"]  # (0,) makes a tuple
         # Initialize self.elements from *args
         elif len(args) == 1:
-            self.elements = tuple(map(float, args[0]))
+            # If the input is a vector, just copy its elements
+            if isinstance(args[0], Vector):
+                self.elements = args[0].elements
+            else:
+                self.elements = tuple(map(float, args[0]))
         else:
             self.elements = tuple(map(float, args))
 
