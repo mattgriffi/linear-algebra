@@ -35,13 +35,11 @@ def main():
     H = Matrix(
         Vector(0, 0, 2, 4, 4),
         Vector(0, 3, 5, 3, 0),
-        transpose=True
     )
 
     A = Matrix(
         Vector(1, 1),
         Vector(-1, 1),
-        transpose=True
     )
 
     AH = A * H
@@ -51,6 +49,8 @@ def main():
     print(H)
     print()
     print(AH)
+    print()
+    print(Matrix(zero=(5, 4)))
 
 
 if __name__ == "__main__":

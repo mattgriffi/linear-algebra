@@ -37,23 +37,22 @@ class Matrix:
         """
         # Initialize to a zero matrix if "zero" is given
         if "zero" in kwargs:
-            # TODO implement zero matrix initialization
-            self.columns = (0,) * kwargs["zero"]  # (0,) makes a tuple
+            m, n = kwargs["zero"]
+            self.rows = (Vector(zero=n),) * m
         # Initialize columns vectors from *args
         elif len(args) == 1:
-            self.columns = tuple(args[0])
+            self.rows = tuple(args[0])
         else:
-            self.columns = args
+            self.rows = args
 
         # Initialize row vectors from the column vectors
-        self.rows = tuple(Vector(x) for x in zip(*self.columns))
+        self.columns = tuple(Vector(x) for x in zip(*self.rows))
 
-        if "transpose" in kwargs:
-            if kwargs["transpose"]:
-                self.rows, self.columns = self.columns, self.rows
+        if "transpose" in kwargs and kwargs["transpose"]:
+            self.rows, self.columns = self.columns, self.rows
 
-        # It is a zero matrix if all of the column vectors are zero
-        self.non_zero = any(bool(col) for col in self.columns)
+        # It is a zero matrix if all of the row vectors are zero
+        self.non_zero = any(bool(r) for r in self.rows)
 
     def dimension(self):
         """Returns the dimension of the Matrix as a tuple (rows, columns).
@@ -63,19 +62,19 @@ class Matrix:
     def __eq__(self, other):
         if not isinstance(other, Matrix) or self.dimension() != other.dimension():
             return False
-        return all(u == v for u, v in zip(self.columns, other.columns))
+        return all(u == v for u, v in zip(self.rows, other.rows))
 
     def __add__(self, other):
         if not isinstance(other, Matrix):
             return NotImplemented
         check_dimensions(self, other, "add")
-        return Matrix(u + v for u, v in zip(self.columns, other.columns))
+        return Matrix(u + v for u, v in zip(self.rows, other.rows))
 
     def __sub__(self, other):
         if not isinstance(other, Matrix):
             return NotImplemented
         check_dimensions(self, other, "subtract")
-        return Matrix(u - v for u, v in zip(self.columns, other.columns))
+        return Matrix(u - v for u, v in zip(self.rows, other.rows))
 
     def __mul__(self, other):
         if isinstance(other, Vector):
@@ -85,10 +84,10 @@ class Matrix:
             # Self must have same number of columns as other has rows
             if self.dimension()[1] != other.dimension()[0]:
                 raise DimensionError(ERROR.format("multiply"))
-            return Matrix(Vector(vmath.dot(r, c) for r in self.rows) for c in other.columns)
+            return Matrix(Vector(vmath.dot(r, c) for c in other.columns) for r in self.rows)
         else:
             # Scalar multiplication
-            return Matrix(other * v for v in self.columns)
+            return Matrix(other * r for r in self.rows)
 
     def __rmul__(self, other):
         # TODO implement for matrix-vector multiplication which is not commutative
@@ -115,7 +114,7 @@ class Matrix:
         if isinstance(value, Vector):
             return value in self.rows or value in self.columns
         else:
-            return any(value in row for row in self.rows)
+            return any(value in r for r in self.rows)
 
     def __str__(self):
         # Get the str of each row with a new line after every except the last
