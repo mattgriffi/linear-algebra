@@ -59,7 +59,7 @@ class Matrix:
         else:
             self.rows = tuple(Vector(x) for x in args)
 
-        # Initialize column vectors from the row column vectors
+        # Initialize column vectors from the row vectors
         self.columns = tuple(Vector(x) for x in zip(*self.rows))
 
         # Swap rows and columns if we were given column vectors
