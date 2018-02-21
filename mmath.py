@@ -26,3 +26,18 @@ def factorize(A):
     # Upper triangular Matrix R = (Q^T)A
     R = transpose(Q) * A
     return Q, R
+
+
+def row_swap(A, row1, row2):
+    """Swaps row1 with row2 and returns a new Matrix.
+    """
+
+
+def row_add(A, row1, row2):
+    """Adds row1 to row2 and returns a new Matrix.
+    """
+
+
+def row_multiply(A, row, k):
+    """Multiplies row by scalar k and returns a new Matrix.
+    """
