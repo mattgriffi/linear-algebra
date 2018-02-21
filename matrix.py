@@ -45,9 +45,9 @@ class Matrix:
             self.rows = (Vector(zero=n),) * m
         # Initialize columns vectors from *args
         elif len(args) == 1:
-            self.rows = tuple(args[0])
+            self.rows = tuple(Vector(x) for x in args[0])
         else:
-            self.rows = args
+            self.rows = tuple(Vector(x) for x in args)
 
         # Initialize row vectors from the column vectors
         self.columns = tuple(Vector(x) for x in zip(*self.rows))
