@@ -62,7 +62,7 @@ class Matrix:
         self.dim = Dimension(len(self.rows), len(self.columns))
 
     def __eq__(self, other):
-        if not isinstance(other, Matrix) or self.dimension() != other.dimension():
+        if not isinstance(other, Matrix) or self.dim != other.dim:
             return False
         return all(u == v for u, v in zip(self.rows, other.rows))
 
@@ -86,7 +86,7 @@ class Matrix:
             # Self must have same number of columns as other has rows
             if self.dim.columns != other.dim.rows:
                 raise DimensionError(ERROR.format("multiply"))
-            return Matrix(Vector(vmath.dot(r, c) for c in other.columns) for r in self.rows)
+            return Matrix((vmath.dot(r, c) for c in other.columns) for r in self.rows)
         else:
             # Scalar multiplication
             return Matrix(other * r for r in self.rows)
