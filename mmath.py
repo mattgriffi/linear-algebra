@@ -2,12 +2,8 @@
 with Matrices.
 """
 
-import itertools
-import math
-
 import vmath
-from matrix import Matrix, check_dimensions
-from vector import Vector
+from matrix import Matrix
 
 
 def transpose(A):
