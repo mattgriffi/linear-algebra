@@ -12,7 +12,7 @@ from vector import Vector
 def transpose(A):
     """Calculates the transpose of Matrix A.
     """
-    return Matrix(A.rows)
+    return Matrix(A.columns)
 
 
 def trace(A):
