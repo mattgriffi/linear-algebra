@@ -26,7 +26,7 @@ def factorize(A):
     """Performs QR factorization on invertible Matrix A. Returns (Q, R).
     """
     # Use Gram-Schidt to calculate orthogonal Matrix Q from columns of A
-    Q = Matrix(vmath.gs(A.columns), transpose=True)
+    Q = Matrix(vmath.gs(A.columns), columns=True)
     # Upper triangular Matrix R = (Q^T)A
     R = transpose(Q) * A
     return Q, R

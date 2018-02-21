@@ -29,19 +29,29 @@ def check_dimensions(A, B, reason):
 
 
 class Matrix:
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, columns=False, zero=None):
         """A Matrix consisting of Vectors. Matrices are immutable.
 
         Parameters
         ----------
         *args
-
-        **kwargs
-
+            If a single argument is given, that argument should be an iterable
+            of iterables, with the internal iterables containing the elements
+            of the rows of the Matrix.
+            If multiple arguments are given, those arguments should be iterables
+            containing the elements of the rows of the Matrix.
+        columns : bool, optional
+            If True, *args will be used to construct the columns of the Matrix
+            instead of the rows. This is equivalent to setting columns to False,
+            then taking the transpose of the resulting Matrix. Default False.
+        zero : 2-tuple, optional
+            If given, should be a tuple of ints (row, columns) indicating the
+            dimensions of the zero Matrix to construct. If zero is specified,
+            all other parameters are ignored.
         """
-        # Initialize to a zero matrix if "zero" is given
-        if "zero" in kwargs:
-            m, n = kwargs["zero"]
+        # Initialize a zero matrix if zero is given
+        if zero is not None:
+            m, n = zero
             self.rows = (Vector(zero=n),) * m
         # Initialize columns vectors from *args
         elif len(args) == 1:
@@ -49,10 +59,11 @@ class Matrix:
         else:
             self.rows = tuple(Vector(x) for x in args)
 
-        # Initialize row vectors from the column vectors
+        # Initialize column vectors from the row column vectors
         self.columns = tuple(Vector(x) for x in zip(*self.rows))
 
-        if "transpose" in kwargs and kwargs["transpose"]:
+        # Swap rows and columns if we were given column vectors
+        if columns and zero is None:
             self.rows, self.columns = self.columns, self.rows
 
         # It is a zero matrix if all of the row vectors are zero
