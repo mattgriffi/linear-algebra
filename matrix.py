@@ -53,7 +53,7 @@ class Matrix:
         if zero is not None:
             m, n = zero
             self.rows = (Vector(zero=n),) * m
-        # Initialize columns vectors from *args
+        # Initialize row vectors from *args
         elif len(args) == 1:
             self.rows = tuple(Vector(x) for x in args[0])
         else:
