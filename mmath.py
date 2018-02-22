@@ -112,10 +112,7 @@ def rref(A):
         # Eliminate nonzero elements of all other rows in column c
         for i in (x for x in range(m) if x != r):
             if not_zero(A[i][c]):
-                val_to_eliminate = A[i][c]
-                A = row_multiply(A, r, -1 * val_to_eliminate)
-                A = row_add(A, r, i)
-                A = row_multiply(A, r, -1 / val_to_eliminate)
+                A = row_add_mul(A, r, i, -1 * A[i][c])
 
         # Go to next row and column
         r += 1
@@ -145,4 +142,12 @@ def row_multiply(A, row, k):
     """
     rows = list(A.rows)
     rows[row] = k * rows[row]
+    return Matrix(rows)
+
+
+def row_add_mul(A, row1, row2, k):
+    """Adds a multiple of row1 to row2 and returns a new Matrix.
+    """
+    rows = list(A.rows)
+    rows[row2] = k * rows[row1] + rows[row2]
     return Matrix(rows)
