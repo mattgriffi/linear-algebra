@@ -91,8 +91,10 @@ class Matrix:
 
     def __mul__(self, other):
         if isinstance(other, Vector):
-            # TODO implement matrix-vector multiplication
-            return NotImplemented
+            if self.dim.columns != other.dim:
+                raise DimensionError(
+                    "Cannot apply Matrix to Vector that is not of appropriate dimension.")
+            return Vector(vmath.dot(row, other) for row in self.rows)
         elif isinstance(other, Matrix):
             # Self must have same number of columns as other has rows
             if self.dim.columns != other.dim.rows:
