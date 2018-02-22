@@ -54,10 +54,7 @@ class Vector:
         # Initialize self.non_zero
         self.non_zero = any(not math.isclose(e, 0, abs_tol=1e-15) for e in self.elements)
 
-    def dimension(self):
-        """Returns the dimension of the Vector.
-        """
-        return len(self)
+        self.dim = len(self)
 
     def __len__(self):
         return len(self.elements)

@@ -29,7 +29,7 @@ def check_dimensions(A, B, reason):
 
 
 class Matrix:
-    def __init__(self, *args, columns=False, zero=None):
+    def __init__(self, *args, columns=False, zero=None, identity=None):
         """A Matrix consisting of Vectors. Matrices are immutable.
 
         Parameters
@@ -48,11 +48,20 @@ class Matrix:
             If given, should be a tuple of ints (row, columns) indicating the
             dimensions of the zero Matrix to construct. If zero is specified,
             all other parameters are ignored.
+        identity : int, optional
+            If given, an identity Matrix of the given dimension will be constructed.
+            All other parameters will be ignored.
         """
+        if zero is not None and identity is not None:
+            raise ValueError("Matrix cannot be both zero and identity.")
         # Initialize a zero matrix if zero is given
         if zero is not None:
             m, n = zero
             self.rows = (Vector(zero=n),) * m
+        # Initialize an identity matrix if identity is given
+        elif identity is not None:
+            n = identity
+            self.rows = tuple(Vector((1 if i == j else 0) for j in range(n)) for i in range(n))
         # Initialize row vectors from *args
         elif len(args) == 1:
             self.rows = tuple(Vector(x) for x in args[0])
@@ -67,7 +76,12 @@ class Matrix:
             self.rows, self.columns = self.columns, self.rows
 
         # It is a zero matrix if all of the row vectors are zero
-        self.non_zero = any(bool(r) for r in self.rows)
+        if zero is not None:
+            self.non_zero = False
+        elif identity is not None:
+            self.non_zero = True
+        else:
+            self.non_zero = any(bool(r) for r in self.rows)
 
         # Initialize dim to (rows, columns)
         self.dim = Dimension(len(self.rows), len(self.columns))
@@ -91,8 +105,11 @@ class Matrix:
 
     def __mul__(self, other):
         if isinstance(other, Vector):
-            # TODO implement matrix-vector multiplication
-            return NotImplemented
+            # TODO implement the case of a column matrix times a row vector
+            if self.dim.columns != other.dim:
+                raise DimensionError(
+                    "Cannot apply Matrix to Vector that is not of appropriate dimension.")
+            return Vector(vmath.dot(row, other) for row in self.rows)
         elif isinstance(other, Matrix):
             # Self must have same number of columns as other has rows
             if self.dim.columns != other.dim.rows:
@@ -103,7 +120,13 @@ class Matrix:
             return Matrix(other * r for r in self.rows)
 
     def __rmul__(self, other):
-        # TODO implement for matrix-vector multiplication which is not commutative
+        if isinstance(other, Vector):
+            # TODO implement the case of a column vector times a row matrix
+            if self.dim.columns != other.dim:
+                raise DimensionError(
+                    "Cannot apply Matrix to Vector that is not of appropriate dimension.")
+                return Vector(vmath.dot(col, other) for col in self.columns)
+        # Assume scalar multiplication
         return self * other
 
     def __truediv__(self, k):
