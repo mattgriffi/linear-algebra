@@ -83,3 +83,18 @@ def factorize(A):
 def rref(A):
     """Returns the reduced row echelon form of Matrix A.
     """
+    # This will be very inefficient with immutable matrices and vectors
+    m, n = A.dim
+    r, c = 0, 0
+
+    while r < m and c < n:
+
+        # Find the first row with a non-zero lead element, swap it
+        # to row r, column c is a zero vector, skip it
+
+        # Divide row r by its leading element
+
+        # Eliminate nonzero elements in column c of all other rows
+
+        r += 1
+        c += 1
