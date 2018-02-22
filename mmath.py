@@ -4,6 +4,7 @@ with Matrices.
 
 import vmath
 from matrix import Matrix, DimensionError
+from vector import Vector
 
 
 def transpose(A):
@@ -16,6 +17,15 @@ def trace(A):
     """Calculates the sum of the leading diagonal of Matrix A.
     """
     return sum(A[i][i] for i in range(min(A.dim)))
+
+
+def augment(A, B):
+    """Augments Matrix A with Matrix or Vector B.
+    """
+    if isinstance(B, Vector):
+        return Matrix(*A.columns, B, columns=True)
+    else:
+        return Matrix(*A.columns, *B.columns, columns=True)
 
 
 def factorize(A):
