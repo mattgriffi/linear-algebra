@@ -98,3 +98,27 @@ def rref(A):
 
         r += 1
         c += 1
+
+
+def row_swap(A, row1, row2):
+    """Swaps row1 with row2 and returns a new Matrix.
+    """
+    rows = list(A.rows)
+    rows[row1], rows[row2] = rows[row2], rows[row1]
+    return Matrix(rows)
+
+
+def row_add(A, row1, row2):
+    """Adds row1 to row2 and returns a new Matrix.
+    """
+    rows = list(A.rows)
+    rows[row2] = rows[row1] + rows[row2]
+    return Matrix(rows)
+
+
+def row_multiply(A, row, k):
+    """Multiplies row by scalar k and returns a new Matrix.
+    """
+    rows = list(A.rows)
+    rows[row] = k * rows[row]
+    return Matrix(rows)
