@@ -4,8 +4,6 @@ with Matrices.
 
 import math
 
-from contextlib import suppress
-
 import vmath
 from matrix import Matrix, DimensionError
 from vector import Vector
