@@ -21,10 +21,32 @@ def trace(A):
 
 def augment(A, B):
     """Augments Matrix A with Matrix or Vector B.
+
+    Parameters
+    ----------
+    A : Matrix
+        The Matrix to augment with B.
+    B : Matrix or Vector
+        The Matrix or Vector to attach to A.
+
+    Returns
+    -------
+    Matrix
+        The result of augmenting A with B.
+
+    Raises
+    ------
+    DimensionError
+        If A and B do not have the same number of rows (Matrix), or if
+        B does not have as many elements as A has rows (Vector).
     """
     if isinstance(B, Vector):
+        if A.dim.rows != B.dim:
+            raise DimensionError("Cannot augment Matrix with Vector of innapropriate dimension.")
         return Matrix(*A.columns, B, columns=True)
     else:
+        if A.dim.rows != B.dim.rows:
+            raise DimensionError("Cannot augment Matrix with Matrix of innapropriate dimension.")
         return Matrix(*A.columns, *B.columns, columns=True)
 
 
