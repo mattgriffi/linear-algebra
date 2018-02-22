@@ -2,6 +2,8 @@
 with Matrices.
 """
 
+import math
+
 import vmath
 from matrix import Matrix, DimensionError
 from vector import Vector
@@ -76,3 +78,8 @@ def factorize(A):
     R = transpose(Q) * A
 
     return Q, R
+
+
+def rref(A):
+    """Returns the reduced row echelon form of Matrix A.
+    """
