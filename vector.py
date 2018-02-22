@@ -109,9 +109,16 @@ class Vector:
         return next(self.elements)
 
     def __str__(self):
-        # Create a string with each of the elements, rounded to four decimal
-        # places, left justified with up to 10 spaces of padding, with a blank
-        # before nonnegative numbers.
-        return "".join(
-            (("" if e < 0 else " ") + "{}").format(round(e, 4)).ljust(10) for e in self
-            )
+        s = []
+        for e in self:
+            # Prevent -0.0 from showing up in output
+            if math.isclose(e, 0, abs_tol=1e-15):
+                e = 0.0
+            # Round to 4 decimal places
+            e = round(e, 4)
+            # Make string with a space to account for negative signs,
+            # left justified with 10 spaces
+            es = (("" if e < 0 else " ") + "{}").format(e).ljust(10)
+            # Append to output list
+            s.append(es)
+        return "".join(s)
