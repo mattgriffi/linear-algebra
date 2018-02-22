@@ -18,29 +18,15 @@ def main():
         Vector(1, 0, 0)
     )
 
-    Q, R = mmath.factorize(A)
+    I = Vector(-1, -2, -3)
+    AI = mmath.augment(A, I)
+    Ap, Ip = mmath.deaugment(AI, 1)
 
-    r = math.sqrt
-
-    Qp = 1 / r(6) * Matrix(
-        Vector(r(2), 1, r(3)),
-        Vector(r(2), 1, -r(3)),
-        Vector(r(2), -2, 0)
-    )
-
-    Rp = 1 / r(6) * Matrix(
-        Vector(3 * r(2), 2 * r(2), 2 * r(2)),
-        Vector(0, 2, 2),
-        Vector(0, 0, 2 * r(3))
-    )
-
-    print(Q)
+    print(AI)
     print()
-    print(Qp)
+    print(Ap)
     print()
-    print(R)
-    print()
-    print(Rp)
+    print(Ip)
 
 
 if __name__ == "__main__":

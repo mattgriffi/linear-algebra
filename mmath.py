@@ -28,6 +28,15 @@ def augment(A, B):
         return Matrix(*A.columns, *B.columns, columns=True)
 
 
+def deaugment(A, n):
+    """Splits the last n columns off of A. Returns the resulting Matrices or
+    Matrix and Vector if n is 1.
+    """
+    if n == 1:
+        return Matrix(A.columns[:-1], columns=True), A.columns[-1]
+    return Matrix(A.columns[:-n], columns=True), Matrix(A.columns[-n:], columns=True)
+
+
 def factorize(A):
     """Performs QR factorization on invertible Matrix A. Returns (Q, R).
     """
