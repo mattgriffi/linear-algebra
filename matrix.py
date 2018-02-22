@@ -105,6 +105,7 @@ class Matrix:
 
     def __mul__(self, other):
         if isinstance(other, Vector):
+            # TODO implement the case of a column matrix times a row vector
             if self.dim.columns != other.dim:
                 raise DimensionError(
                     "Cannot apply Matrix to Vector that is not of appropriate dimension.")
@@ -119,7 +120,12 @@ class Matrix:
             return Matrix(other * r for r in self.rows)
 
     def __rmul__(self, other):
-        # TODO implement for matrix-vector multiplication which is not commutative
+        # TODO implement the case of a column vector times a row matrix
+        if self.dim.columns != other.dim:
+            raise DimensionError(
+                "Cannot apply Matrix to Vector that is not of appropriate dimension.")
+            return Vector(vmath.dot(col, other) for col in self.columns)
+        # Assume scalar multiplication
         return self * other
 
     def __truediv__(self, k):
