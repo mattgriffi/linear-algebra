@@ -39,7 +39,7 @@ def gs(vectors, normal=True):
         if v:  # Do not include zero vectors
             new.append(v)
         # Any more vectors would be linearly dependent, so stop
-        if len(new) == v.dimension():
+        if len(new) == v.dim:
             break
     return normalize_all(new) if normal else new
 
@@ -195,7 +195,7 @@ def linear_combination(basis, coefficients):
     DimensionError
         If any of the input Vectors differ in dimension.
     """
-    n = basis[0].dimension()
+    n = basis[0].dim
     return sum((k * v for k, v in zip(coefficients, basis)), Vector(zero=n))
 
 
