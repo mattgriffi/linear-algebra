@@ -13,16 +13,17 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        Vector(1, 0, 4),
-        Vector(1, 1, 6),
-        Vector(-3, 0, -10)
+        (1, 0, 4, 5, 6, -12),
+        (0, 0, 6, 3, 2, 0),
+        (-3, 0, -10, -2, 2, -3),
+        (1, 0, 1, 0, 0, 3),
+        (0, 0, 1, 0, 0, 3),
+        (1, 0, 1, -3, 0, 3),
+        (0, 0, 0, 0, 10, 0),
+        (3, 0, 1, -7, 0, 3),
     )
 
-    I = Matrix(identity=3)
-    AI = mmath.augment(A, I)
-    Ap, Ip = mmath.deaugment(AI, 1)
-
-    printm(mmath.rref(AI))
+    printm(mmath.rref(A))
 
 
 def printm(A):

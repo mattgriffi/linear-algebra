@@ -92,21 +92,18 @@ def rref(A):
     not_zero = lambda x: not math.isclose(x, 0, abs_tol=1e-15)
 
     while r < m and c < n:
-        # TODO make this less bad
-
-        # If column c is all 0, skip it
-        if not A.columns[c]:
+        try:
+            # Get the first unprocessed row index of a nonzero element in column c
+            nz = next(i for i, x in enumerate(A.columns[c][r:]) if not_zero(x)) + r
+            # Swap that row with row r
+            A = row_swap(A, r, nz)
+        except StopIteration:
+            # If there are no nonzero elements left, skip column
             c += 1
             continue
 
-        with suppress(StopIteration):
-            # Get the row index of the first non-zero element of column c
-            # below row r
-            nz = next(i for i, x in enumerate(A.columns[c][r + 1:]) if not_zero(x))
-            # Swap that row with row r
-            A = row_swap(A, r, nz)
-
         # Divide row r by its leading element so it becomes 1
+        assert not_zero(A[r][c])
         A = row_multiply(A, r, 1 / A[r][c])
 
         # Eliminate nonzero elements of all other rows in column c
@@ -124,6 +121,8 @@ def rref(A):
 def row_swap(A, row1, row2):
     """Swaps row1 with row2 and returns a new Matrix.
     """
+    if row1 == row2:
+        return A
     rows = list(A.rows)
     rows[row1], rows[row2] = rows[row2], rows[row1]
     return Matrix(rows)
@@ -140,6 +139,8 @@ def row_add(A, row1, row2):
 def row_multiply(A, row, k):
     """Multiplies row by scalar k and returns a new Matrix.
     """
+    if k == 1:
+        return A
     rows = list(A.rows)
     rows[row] = k * rows[row]
     return Matrix(rows)
@@ -148,6 +149,8 @@ def row_multiply(A, row, k):
 def row_add_mul(A, row1, row2, k):
     """Adds a multiple of row1 to row2 and returns a new Matrix.
     """
+    if k == 0:
+        return A
     rows = list(A.rows)
     rows[row2] = k * rows[row1] + rows[row2]
     return Matrix(rows)
