@@ -83,7 +83,7 @@ def factorize(A):
 
 
 def rref(A):
-    """Performs Gauss-Jordan Elimination return the reduced row
+    """Performs Gauss-Jordan Elimination, returns the reduced row
     echelon form of A.
     """
     # This will be very inefficient with immutable matrices and vectors
