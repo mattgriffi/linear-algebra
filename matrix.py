@@ -29,7 +29,7 @@ def check_dimensions(A, B, reason):
 
 
 class Matrix:
-    def __init__(self, *args, columns=False, zero=None):
+    def __init__(self, *args, columns=False, zero=None, identity=None):
         """A Matrix consisting of Vectors. Matrices are immutable.
 
         Parameters
@@ -48,11 +48,20 @@ class Matrix:
             If given, should be a tuple of ints (row, columns) indicating the
             dimensions of the zero Matrix to construct. If zero is specified,
             all other parameters are ignored.
+        identity : int, optional
+            If given, an identity Matrix of the given dimension will be constructed.
+            All other parameters will be ignored.
         """
+        if zero is not None and identity is not None:
+            raise ValueError("Matrix cannot be both zero and identity.")
         # Initialize a zero matrix if zero is given
         if zero is not None:
             m, n = zero
             self.rows = (Vector(zero=n),) * m
+        # Initialize an identity matrix if identity is given
+        elif identity is not None:
+            n = identity
+            self.rows = tuple(Vector((1 if i == j else 0) for j in range(n)) for i in range(n))
         # Initialize row vectors from *args
         elif len(args) == 1:
             self.rows = tuple(Vector(x) for x in args[0])
