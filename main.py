@@ -13,20 +13,21 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        Vector(1, 1, 2),
-        Vector(1, 1, 0),
-        Vector(1, 0, 0)
+        Vector(1, 0, 4),
+        Vector(1, 1, 6),
+        Vector(-3, 0, -10)
     )
 
-    I = Vector(-1, -2, -3)
+    I = Matrix(identity=3)
     AI = mmath.augment(A, I)
     Ap, Ip = mmath.deaugment(AI, 1)
 
-    print(AI)
+    printm(mmath.rref(AI))
+
+
+def printm(A):
+    print(A)
     print()
-    print(Ap)
-    print()
-    print(Ip)
 
 
 if __name__ == "__main__":

@@ -4,6 +4,8 @@ with Matrices.
 
 import math
 
+from contextlib import suppress
+
 import vmath
 from matrix import Matrix, DimensionError
 from vector import Vector
@@ -81,23 +83,45 @@ def factorize(A):
 
 
 def rref(A):
-    """Returns the reduced row echelon form of Matrix A.
+    """Performs Gauss-Jordan Elimination return the reduced row
+    echelon form of A.
     """
     # This will be very inefficient with immutable matrices and vectors
     m, n = A.dim
     r, c = 0, 0
+    not_zero = lambda x: not math.isclose(x, 0, abs_tol=1e-15)
 
     while r < m and c < n:
+        # TODO make this less bad
 
-        # Find the first row with a non-zero lead element, swap it
-        # to row r, column c is a zero vector, skip it
+        # If column c is all 0, skip it
+        if not A.columns[c]:
+            c += 1
+            continue
 
-        # Divide row r by its leading element
+        with suppress(StopIteration):
+            # Get the row index of the first non-zero element of column c
+            # below row r
+            nz = next(i for i, x in enumerate(A.columns[c][r + 1:]) if not_zero(x))
+            # Swap that row with row r
+            A = row_swap(A, r, nz)
 
-        # Eliminate nonzero elements in column c of all other rows
+        # Divide row r by its leading element so it becomes 1
+        A = row_multiply(A, r, 1 / A[r][c])
 
+        # Eliminate nonzero elements of all other rows in column c
+        for i in (x for x in range(m) if x != r):
+            if not_zero(A[i][c]):
+                val_to_eliminate = A[i][c]
+                A = row_multiply(A, r, -1 * val_to_eliminate)
+                A = row_add(A, r, i)
+                A = row_multiply(A, r, -1 / val_to_eliminate)
+
+        # Go to next row and column
         r += 1
         c += 1
+
+    return A
 
 
 def row_swap(A, row1, row2):
