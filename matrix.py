@@ -76,7 +76,12 @@ class Matrix:
             self.rows, self.columns = self.columns, self.rows
 
         # It is a zero matrix if all of the row vectors are zero
-        self.non_zero = any(bool(r) for r in self.rows)
+        if zero is not None:
+            self.non_zero = False
+        elif identity is not None:
+            self.non_zero = True
+        else:
+            self.non_zero = any(bool(r) for r in self.rows)
 
         # Initialize dim to (rows, columns)
         self.dim = Dimension(len(self.rows), len(self.columns))
