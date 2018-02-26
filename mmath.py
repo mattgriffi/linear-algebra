@@ -139,7 +139,7 @@ def column_space(A):
     """Returns a list of Vectors forming a basis for the column space of Matrix A.
     """
     R = rref(transpose(A))
-    return [row for row in R if row]
+    return row_space(R, is_rref=True)
 
 
 def row_swap(A, row1, row2):
