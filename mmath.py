@@ -126,14 +126,18 @@ def rref(A):
     return A
 
 
-def row_space(A):
+def row_space(A, is_rref=False):
     """Returns a list of Vectors forming a basis for the row space of Matrix A.
     """
+    R = A if is_rref else rref(A)
+    return [row for row in R if row]
 
 
 def column_space(A):
     """Returns a list of Vectors forming a basis for the column space of Matrix A.
     """
+    R = rref(transpose(A))
+    return [row for row in R if row]
 
 
 def row_swap(A, row1, row2):
