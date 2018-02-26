@@ -21,6 +21,16 @@ def trace(A):
     return sum(A[i][i] for i in range(min(A.dim)))
 
 
+def rank(A):
+    """Returns the rank of Matrix A.
+    """
+
+
+def nullity(A):
+    """Returns the nullity of Matrix A.
+    """
+
+
 def augment(A, B):
     """Augments Matrix A with Matrix or Vector B.
 
@@ -114,6 +124,16 @@ def rref(A):
         c += 1
 
     return A
+
+
+def row_space(A):
+    """Returns a list of Vectors forming a basis for the row space of Matrix A.
+    """
+
+
+def column_space(A):
+    """Returns a list of Vectors forming a basis for the column space of Matrix A.
+    """
 
 
 def row_swap(A, row1, row2):
