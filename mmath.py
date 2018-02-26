@@ -21,14 +21,16 @@ def trace(A):
     return sum(A[i][i] for i in range(min(A.dim)))
 
 
-def rank(A):
+def rank(A, is_rref=False):
     """Returns the rank of Matrix A.
     """
+    return len(row_space(A, is_rref))
 
 
-def nullity(A):
+def nullity(A, is_rref=False):
     """Returns the nullity of Matrix A.
     """
+    return A.dim.rows - rank(A, is_rref)
 
 
 def augment(A, B):
