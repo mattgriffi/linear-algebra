@@ -30,7 +30,7 @@ def rank(A, is_rref=False):
 def nullity(A, is_rref=False):
     """Returns the nullity of Matrix A.
     """
-    return A.dim.rows - rank(A, is_rref)
+    return A.dim.columns - rank(A, is_rref)
 
 
 def augment(A, B):
