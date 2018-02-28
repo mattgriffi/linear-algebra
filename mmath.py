@@ -36,13 +36,19 @@ def nullity(A, is_rref=False):
 def power(A, n):
     """Returns square Matrix A raised to the n'th power.
     """
-    # TODO optimize A^2m = (A^m)(A^m) maybe recursive?
     if A.dim.rows != A.dim.columns:
         raise DimensionError("Cannot power non-square Matrix.")
-    B = A
-    for _ in range(n - 1):
-        B = B * A
-    return B
+
+    def r(B, n):
+        # Use exponentiation by squaring method
+        if n <= 1:
+            return B
+        elif n % 2:  # Odd exponent
+            return B * r(B * B, (n - 1) / 2)
+        else:  # Even exponent
+            return r(B * B, n / 2)
+
+    return r(A, n)
 
 
 def augment(A, B):
