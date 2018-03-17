@@ -128,6 +128,15 @@ def rref(A):
     return A
 
 
+def change_basis(v, B):
+    """Returns Vector v in terms of basis Vector set B.
+    """
+    A = Matrix(*B, v, columns=True)
+    R = rref(A)
+    _, vb = deaugment(R, 1)
+    return vb
+
+
 def transform_all(A, V):
     """Applies Matrix A to all Vectors in V, returns a list of result.
     """
