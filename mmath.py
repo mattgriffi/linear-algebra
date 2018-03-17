@@ -128,12 +128,20 @@ def rref(A):
     return A
 
 
+def get_transformation_matrix(T, B, C):
+    """Returns the transformation Matrix for T with respect to domain
+    basis B and codomain basis C.
+    """
+    W = Matrix(C, columns=True)
+    result_columns = (deaugment(rref(augment(W, v)), 1)[1] for v in transform_all(T, B))
+    return Matrix(result_columns, columns=True)
+
+
 def change_basis(v, B):
     """Returns Vector v in terms of basis Vector set B.
     """
     A = Matrix(*B, v, columns=True)
-    R = rref(A)
-    _, vb = deaugment(R, 1)
+    _, vb = deaugment(rref(A), 1)
     return vb
 
 
