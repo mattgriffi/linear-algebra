@@ -128,6 +128,12 @@ def rref(A):
     return A
 
 
+def transform_all(A, V):
+    """Applies Matrix A to all Vectors in V, returns a list of result.
+    """
+    return [A * v for v in V]
+
+
 def row_space(A, is_rref=False):
     """Returns a list of Vectors forming a basis for the row space of Matrix A.
     """
