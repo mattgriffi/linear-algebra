@@ -33,6 +33,24 @@ def nullity(A, is_rref=False):
     return A.dim.columns - rank(A, is_rref)
 
 
+def power(A, n):
+    """Returns square Matrix A raised to the n'th power.
+    """
+    if A.dim.rows != A.dim.columns:
+        raise DimensionError("Cannot power non-square Matrix.")
+
+    def r(B, n):
+        # Use exponentiation by squaring method
+        if n <= 1:
+            return B
+        elif n % 2:  # Odd exponent
+            return B * r(B * B, (n - 1) / 2)
+        else:  # Even exponent
+            return r(B * B, n / 2)
+
+    return r(A, n)
+
+
 def augment(A, B):
     """Augments Matrix A with Matrix or Vector B.
 
