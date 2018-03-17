@@ -61,7 +61,7 @@ class Matrix:
         # Initialize an identity matrix if identity is given
         elif identity is not None:
             n = identity
-            self.rows = tuple(Vector((1 if i == j else 0) for j in range(n)) for i in range(n))
+            self.rows = tuple(vmath.get_standard_unit_vectors(n))
         # Initialize row vectors from *args
         elif len(args) == 1:
             self.rows = tuple(Vector(x) for x in args[0])

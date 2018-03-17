@@ -73,6 +73,12 @@ def dot(u, v):
         return round(sum(i * j for i, j in zip(u, v)), 15)
 
 
+def get_standard_unit_vectors(n):
+    """Returns [e_1, e_2, ..., e_n].
+    """
+    return [Vector(1 if i == j else 0 for i in range(n)) for j in range(n)]
+
+
 def is_normal(u):
     """Determines whether u is normal.
 
