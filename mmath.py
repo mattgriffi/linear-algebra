@@ -164,20 +164,23 @@ def change_basis(v, B):
 
 
 def transform_all(A, V):
-    """Applies Matrix A to all Vectors in V, returns a list of result.
+    """Returns an iterator that applies Matrix A to each Vector in V.
     """
-    return [A * v for v in V]
+    for v in V:
+        yield A * v
 
 
 def row_space(A, is_rref=False):
-    """Returns a list of Vectors forming a basis for the row space of Matrix A.
+    """Returns an iterator of Vectors forming a basis for the row space of Matrix A.
     """
     R = A if is_rref else rref(A)
-    return [row for row in R if row]
+    for row in R:
+        if row:
+            yield row
 
 
 def column_space(A):
-    """Returns a list of Vectors forming a basis for the column space of Matrix A.
+    """Returns an iterator of Vectors forming a basis for the column space of Matrix A.
     """
     return row_space(transpose(A))
 
