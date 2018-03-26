@@ -123,5 +123,7 @@ class Vector:
         for e in self:
             if math.isclose(e, 0, abs_tol=1e-15):
                 e = 0
-            s.append(str(Fraction(e).limit_denominator()).ljust(10))
+            sign = '-' if e < 0 else ' '
+            frac = str(Fraction(abs(e)).limit_denominator())
+            s.append('{}{}'.format(sign, frac).ljust(10))
         return "".join(s)
