@@ -2,6 +2,7 @@
 """
 
 
+from fractions import Fraction
 import math
 import numbers
 
@@ -115,4 +116,12 @@ class Vector:
             if math.isclose(e, 0, abs_tol=1e-15):
                 e = 0.0
             s.append("{: .6g}".format(e).ljust(10))
+        return "".join(s)
+
+    def str_fractions(self):
+        s = []
+        for e in self:
+            if math.isclose(e, 0, abs_tol=1e-15):
+                e = 0
+            s.append(str(Fraction(e).limit_denominator()).ljust(10))
         return "".join(s)

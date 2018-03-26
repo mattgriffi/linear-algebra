@@ -153,6 +153,7 @@ class Matrix:
             return any(value in r for r in self.rows)
 
     def __str__(self):
-        # Get the str of each row with a new line after every except the last
-        return "".join(str(r) + ("\n" if i < len(self.rows) - 1 else "")
-                       for i, r in enumerate(self.rows))
+        return "".join(str(r) + '\n' for r in self.rows)[:-1]
+    
+    def str_fractions(self):
+        return "".join(r.str_fractions() + '\n' for r in self.rows)[:-1]
