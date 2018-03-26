@@ -2,7 +2,9 @@
 with Matrices.
 """
 
+import functools
 import math
+import operator
 
 import vmath
 from matrix import Matrix, DimensionError
@@ -168,6 +170,13 @@ def transform_all(A, V):
     """
     for v in V:
         yield A * v
+
+
+def compose(M):
+    """Returns the resulting Matrix from multiplying the Matrices in
+    iterable M together. The result is M[0] * M[1] * ... * M[len(M) - 1]
+    """
+    return functools.reduce(operator.mul, M)
 
 
 def row_space(A, is_rref=False):
