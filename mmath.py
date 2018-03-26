@@ -35,11 +35,23 @@ def nullity(A, is_rref=False):
     return A.dim.columns - rank(A, is_rref)
 
 
+def invert(A):
+    """Returns the inverse of Matrix A. Raises Dimension error if A
+    is not square.
+    """
+    if A.dim.rows != A.dim.columns:
+        raise DimensionError("Cannot invert non-square Matrix.")
+    
+    A_augment_I = augment(A, Matrix(identity=A.dim.columns))
+    _, A_inverse = deaugment(rref(A_augment_I), A.dim.columns)
+    return A_inverse
+
+
 def power(A, n):
     """Returns square Matrix A raised to the n'th power.
     """
     if A.dim.rows != A.dim.columns:
-        raise DimensionError("Cannot power non-square Matrix.")
+        raise DimensionError("Cannot exponentiate non-square Matrix.")
 
     def r(B, n):
         # Use exponentiation by squaring method
