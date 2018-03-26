@@ -114,11 +114,5 @@ class Vector:
             # Prevent -0.0 from showing up in output
             if math.isclose(e, 0, abs_tol=1e-15):
                 e = 0.0
-            # Round to 4 decimal places
-            e = round(e, 4)
-            # Make string with a space to account for negative signs,
-            # left justified with 10 spaces
-            es = (("" if e < 0 else " ") + "{}").format(e).ljust(10)
-            # Append to output list
-            s.append(es)
+            s.append("{: .6g}".format(e).ljust(10))
         return "".join(s)
