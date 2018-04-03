@@ -286,6 +286,8 @@ def row_swap(A, row1, row2):
 def row_add(A, row1, row2):
     """Adds row1 to row2 and returns a new Matrix.
     """
+    if not row1:
+        return
     rows = list(A.rows)
     rows[row2] = rows[row1] + rows[row2]
     return Matrix(rows)
