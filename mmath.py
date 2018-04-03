@@ -63,6 +63,11 @@ def invert(A):
     return A_inverse
 
 
+@_check_square("Cannot find adjoint of non-square Matrix.")
+def adjoint(A):
+    return transpose(cofactor(A))
+
+
 @_check_square("Cannot find determinant of non-square Matrix.")
 def det(A):
     """Returns the determinant of Matrix A.
