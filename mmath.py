@@ -74,6 +74,8 @@ def det(A):
     """
     if A.dim.rows == A.dim.columns == 2:
         return A[0][0] * A[1][1] - A[0][1] * A[1][0]
+    # Expand the first row to calculate determinant
+    return sum(A[0][c] * cofactor_element(A, 0, c) for c in range(A.dim.columns))
 
 
 @_check_square("Cannot find cofactor of non-square Matrix.")
