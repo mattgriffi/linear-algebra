@@ -17,7 +17,7 @@ def _check_square(error_message):
     with the given error_message.
     """
     def decorator(func):
-        @functools.wraps
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             A = args[0]
             if not isinstance(A, Matrix):
@@ -67,11 +67,8 @@ def invert(A):
 def det(A):
     """Returns the determinant of Matrix A.
     """
-    def r(B):
-        if B.dim == (2, 2):
-            return B[0][0] * B[1][1] - B[0][1] * B[1][0]
-
-    return r(A)
+    if A.dim.rows == A.dim.columns == 2:
+        return A[0][0] * A[1][1] - A[0][1] * A[1][0]
 
 
 @_check_square("Cannot find cofactor of non-square Matrix.")
@@ -80,9 +77,15 @@ def cofactor(A):
     """
 
 
-def minor(A, row, col):
+def minor(A, r, c):
     """Returns the minor the entry in Matrix A.
     """
+    rows = list(list(row) for row in A.rows)
+    del rows[r]
+    for row in rows:
+        del row[c]
+    m = Matrix(rows)
+    return det(m)
 
 
 @_check_square("Cannot exponentiate non-square Matrix.")
