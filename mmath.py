@@ -75,8 +75,22 @@ def det(A):
 def cofactor(A):
     """Returns the cofactor Matrix of Matrix A.
     """
+    rows = []
+    for r in range(A.dim.rows):
+        rows.append([])
+        for c in range(A.dim.columns):
+            rows[r].append(cofactor_element(A, r, c))
+    return Matrix(rows)
 
 
+@_check_square("Cannot find cofactor in non-square Matrix.")
+def cofactor_element(A, r, c):
+    """Returns the cofactor of the entry in Matrix A.
+    """
+    return math.pow(-1, r + c) * minor(A, r, c)
+
+
+@_check_square("Cannot find minor in non-square Matrix.")
 def minor(A, r, c):
     """Returns the minor the entry in Matrix A.
     """
