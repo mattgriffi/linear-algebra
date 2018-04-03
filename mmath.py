@@ -56,11 +56,19 @@ def nullity(A, is_rref=False):
 @_check_square("Cannot invert non-square Matrix.")
 def invert(A):
     """Returns the inverse of Matrix A. Raises Dimension error if A
-    is not square.
+    is not square. Uses Gauss-Jordan Elimination.
     """
     A_augment_I = augment(A, Matrix(identity=A.dim.columns))
     _, A_inverse = deaugment(rref(A_augment_I), A.dim.columns)
     return A_inverse
+
+
+@_check_square("Cannot invert non-square Matrix.")
+def invert2(A):
+    """Returns the inverse of Matrix A. Raises Dimension error if A
+    is not square. Uses the determinant and adjoint of A.
+    """
+    return adjoint(A) / det(A)
 
 
 @_check_square("Cannot find adjoint of non-square Matrix.")
