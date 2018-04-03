@@ -11,6 +11,24 @@ from matrix import Matrix, DimensionError
 from vector import Vector
 
 
+def _check_square(error_message):
+    """Checks the first argument of the decorated function to
+    see if it is a square Matrix. If not, raises DimensionError
+    with the given error_message.
+    """
+    def decorator(func):
+        @functools.wraps
+        def wrapper(*args, **kwargs):
+            A = args[0]
+            if not isinstance(A, Matrix):
+                raise ValueError("First arg of function must be Matrix.")
+            if A.dim.rows != A.dim.columns:
+                raise DimensionError(error_message)
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+
+
 def transpose(A):
     """Calculates the transpose of Matrix A.
     """
@@ -35,24 +53,42 @@ def nullity(A, is_rref=False):
     return A.dim.columns - rank(A, is_rref)
 
 
+@_check_square("Cannot invert non-square Matrix.")
 def invert(A):
     """Returns the inverse of Matrix A. Raises Dimension error if A
     is not square.
     """
-    if A.dim.rows != A.dim.columns:
-        raise DimensionError("Cannot invert non-square Matrix.")
-    
     A_augment_I = augment(A, Matrix(identity=A.dim.columns))
     _, A_inverse = deaugment(rref(A_augment_I), A.dim.columns)
     return A_inverse
 
 
+@_check_square("Cannot find determinant of non-square Matrix.")
+def det(A):
+    """Returns the determinant of Matrix A.
+    """
+    def r(B):
+        if B.dim == (2, 2):
+            return B[0][0] * B[1][1] - B[0][1] * B[1][0]
+
+    return r(A)
+
+
+@_check_square("Cannot find cofactor of non-square Matrix.")
+def cofactor(A):
+    """Returns the cofactor Matrix of Matrix A.
+    """
+
+
+def minor(A, row, col):
+    """Returns the minor the entry in Matrix A.
+    """
+
+
+@_check_square("Cannot exponentiate non-square Matrix.")
 def power(A, n):
     """Returns square Matrix A raised to the n'th power.
     """
-    if A.dim.rows != A.dim.columns:
-        raise DimensionError("Cannot exponentiate non-square Matrix.")
-
     def r(B, n):
         # Use exponentiation by squaring method
         if n <= 1:
@@ -105,12 +141,10 @@ def deaugment(A, n):
     return Matrix(A.columns[:-n], columns=True), Matrix(A.columns[-n:], columns=True)
 
 
+@_check_square("Cannot factor non-square Matrix.")
 def factorize(A):
     """Performs QR factorization on invertible Matrix A. Returns (Q, R).
     """
-    if A.dim.rows != A.dim.columns:
-        raise DimensionError("Matrix A must be square.")
-
     # Use Gram-Schidt to calculate orthogonal Matrix Q from columns of A
     Q = Matrix(vmath.gs(A.columns), columns=True)
 
@@ -201,7 +235,8 @@ def row_space(A, is_rref=False):
 
 
 def column_space(A):
-    """Returns an iterator of Vectors forming a basis for the column space of Matrix A.
+    """Returns an iterator of Vectors forming a basis for the column space
+    of Matrix A.
     """
     return row_space(transpose(A))
 
