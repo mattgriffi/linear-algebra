@@ -90,11 +90,8 @@ def det(A):
 def cofactor(A):
     """Returns the cofactor Matrix of Matrix A.
     """
-    rows = []
-    for r in range(A.dim.rows):
-        rows.append([])
-        for c in range(A.dim.columns):
-            rows[r].append(cofactor_element(A, r, c))
+    rows = [[cofactor_element(A, r, c) for c in range(A.dim.columns)]
+            for r in range(A.dim.rows)]
     return Matrix(rows)
 
 
