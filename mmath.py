@@ -86,6 +86,15 @@ def det(A):
     return sum(A[0][c] * cofactor_element(A, 0, c) for c in range(A.dim.columns))
 
 
+@_check_square("Cannot find determinant of non-square Matrix.")
+def det_triangular(A):
+    """Returns the determinant of triangular Matrix A. This is more
+    efficient than the general det function.
+    """
+    diag = (A[i][i] for i in range(A.dim.rows))
+    return functools.reduce(operator.mul, diag)
+
+
 @_check_square("Cannot find cofactor of non-square Matrix.")
 def cofactor(A):
     """Returns the cofactor Matrix of Matrix A.
