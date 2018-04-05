@@ -12,16 +12,16 @@ from vector import Vector
 
 
 def main():
-    T = Matrix(
-        (1/3, 2/3),
-        (2/3, 1/3)
+    A = Matrix(
+        (1, 4, 5, 3),
+        (5, 22, 27, 11),
+        (6, 19, 27, 31),
+        (5, 28, 35, -8)
     )
-    x = Vector(1, 0)
-
-    for i in range(1, 5):
-        printm(mmath.power(T, i) * x)
-    
-    printm(mmath.power(T, 100) * x)
+    L, U = mmath.factor_LU(A)
+    printm(L)
+    printm(U)
+    printm(L * U)
 
 
 def printm(A):

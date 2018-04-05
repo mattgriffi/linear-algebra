@@ -11,6 +11,10 @@ from matrix import Matrix, DimensionError
 from vector import Vector
 
 
+class FactorizationError(Exception):
+    pass
+
+
 def _check_square(error_message):
     """Checks the first argument of the decorated function to
     see if it is a square Matrix. If not, raises DimensionError
@@ -180,7 +184,7 @@ def deaugment(A, n):
 
 
 @_check_square("Cannot factor non-square Matrix.")
-def factorize(A):
+def factor_QR(A):
     """Performs QR factorization on invertible Matrix A. Returns (Q, R).
     """
     # Use Gram-Schidt to calculate orthogonal Matrix Q from columns of A
@@ -196,6 +200,38 @@ def factorize(A):
     return Q, R
 
 
+@_check_square("Cannot factor non-square Matrix.")
+def factor_LU(A):
+    """Performs LR factorization on invertible Matrix A. Returns (L, U).
+    """
+    m, n = A.dim
+    r, c = 0, 0
+    zero = lambda x: math.isclose(x, 0, abs_tol=1e-15)
+    L = list(list(row) for row in Matrix(identity=n))
+    U = A
+
+    # Make U into an upper triangular Matrix while performing
+    # the opposite operations on L
+    while r < m and c < n:
+        # If the diagonal entry is 0 and there is a non-zero
+        # entry below it that needs to be eliminated, we're stuck.
+        if zero(U[r][c]):
+            if any(not zero(A[i][c]) for i in range(r + 1, m)):
+                raise FactorizationError("Matrix cannot be factored.")
+        else:
+            L[r][c] = U[r][c]
+            # Make diagonal entry 1
+            U = row_multiply(U, r, 1 / U[r][c])
+            # Eliminate the rest
+            for i in range(r + 1, m):
+                if not zero(A[i][c]):
+                    L[i][c] = U[i][c]
+                    U = row_add_mul(U, r, i, -1 * U[i][c])
+        r += 1
+        c += 1
+    return Matrix(L), U
+
+
 def rref(A):
     """Performs Gauss-Jordan Elimination, returns the reduced row
     echelon form of A.
@@ -203,12 +239,12 @@ def rref(A):
     # This will be very inefficient with immutable matrices and vectors
     m, n = A.dim
     r, c = 0, 0
-    not_zero = lambda x: not math.isclose(x, 0, abs_tol=1e-15)
+    zero = lambda x: math.isclose(x, 0, abs_tol=1e-15)
 
     while r < m and c < n:
         try:
             # Get the first unprocessed row index of a nonzero element in column c
-            nz = next(i for i, x in enumerate(A.columns[c][r:]) if not_zero(x)) + r
+            nz = next(i for i, x in enumerate(A.columns[c][r:]) if not zero(x)) + r
             # Swap that row with row r
             A = row_swap(A, r, nz)
         except StopIteration:
@@ -217,12 +253,12 @@ def rref(A):
             continue
 
         # Divide row r by its leading element so it becomes 1
-        assert not_zero(A[r][c])
+        assert not zero(A[r][c])
         A = row_multiply(A, r, 1 / A[r][c])
 
         # Eliminate nonzero elements of all other rows in column c
         for i in (x for x in range(m) if x != r):
-            if not_zero(A[i][c]):
+            if not zero(A[i][c]):
                 A = row_add_mul(A, r, i, -1 * A[i][c])
 
         # Go to next row and column
