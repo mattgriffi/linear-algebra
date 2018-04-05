@@ -213,22 +213,21 @@ def factor_LU(A):
     # Make U into an upper triangular Matrix while performing
     # the opposite operations on L
     while r < m and c < n:
-        # If the diagonal entry is 0 and there is a non-zero
-        # entry below it that needs to be eliminated, we're stuck.
+        # If the diagonal entry is 0, we're stuck.
         if zero(U[r][c]):
-            if any(not zero(A[i][c]) for i in range(r + 1, m)):
-                raise FactorizationError("Matrix cannot be factored.")
-        else:
-            L[r][c] = U[r][c]
-            # Make diagonal entry 1
-            U = row_multiply(U, r, 1 / U[r][c])
-            # Eliminate the rest
-            for i in range(r + 1, m):
-                if not zero(A[i][c]):
-                    L[i][c] = U[i][c]
-                    U = row_add_mul(U, r, i, -1 * U[i][c])
+            raise FactorizationError("Matrix cannot be factored.")
+
+        L[r][c] = U[r][c]
+        # Make diagonal entry 1
+        U = row_multiply(U, r, 1 / U[r][c])
+        # Eliminate the rest
+        for i in range(r + 1, m):
+            if not zero(A[i][c]):
+                L[i][c] = U[i][c]
+                U = row_add_mul(U, r, i, -1 * U[i][c])
         r += 1
         c += 1
+
     return Matrix(L), U
 
 
