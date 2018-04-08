@@ -3,6 +3,7 @@ with Matrices.
 """
 
 import functools
+import itertools
 import math
 import operator
 
@@ -209,6 +210,24 @@ def eig(A, n=10, precision=4):
         Q, R = factor_QR(A)
         A = R * Q
     return Vector(round(A[i][i], precision) for i in range(A.dim.rows))
+
+
+def poly(eigenvalues):
+    """Returns a Vector representing the coefficients of the
+    characteristic polynomial for the given eigenvalues.
+    For p(λ) = (c_n)(λ^n) + (c_n-1)(λ^n-1) + ... + (c_1)λ + c_0
+    Returns Vector(c_0, c_1, ..., c_n-1, c_n)
+    """
+    n = len(eigenvalues)
+
+    def gen():
+        for i in range(n):
+            combinations = itertools.combinations(eigenvalues, n - i)
+            products = (functools.reduce(operator.mul, c) for c in combinations)
+            yield sum(products)
+        yield -1 if n % 2 else 1
+
+    return Vector(gen())
 
 
 @_check_square("Cannot factor non-square Matrix.")
