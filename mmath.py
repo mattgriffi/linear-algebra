@@ -200,6 +200,17 @@ def factor_QR(A):
     return Q, R
 
 
+@_check_square("Cannot calculate eigenvalues of non-square Matrix")
+def eig(A, n=10, precision=4):
+    """Calculates the eigenvalues of square Matrix A using n iterations
+    of the QR algorithm. Returns a Vector of the eigenvalues.
+    """
+    for _ in range(n):
+        Q, _ = factor_QR(A)
+        A = transpose(Q) * A * Q
+    return Vector(round(A[i][i], precision) for i in range(A.dim.rows))
+
+
 @_check_square("Cannot factor non-square Matrix.")
 def factor_LU(A):
     """Performs LR factorization on invertible Matrix A. Returns (L, U).
