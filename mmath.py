@@ -206,8 +206,8 @@ def eig(A, n=10, precision=4):
     of the QR algorithm. Returns a Vector of the eigenvalues.
     """
     for _ in range(n):
-        Q, _ = factor_QR(A)
-        A = transpose(Q) * A * Q
+        Q, R = factor_QR(A)
+        A = R * Q
     return Vector(round(A[i][i], precision) for i in range(A.dim.rows))
 
 
