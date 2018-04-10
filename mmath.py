@@ -58,6 +58,25 @@ def nullity(A, is_rref=False):
     return A.dim.columns - rank(A, is_rref)
 
 
+def solve(A, b):
+    R, x = deaugment(rref(augment(A, b)), 1)
+    x = list(reversed(x))  # Build x from the bottom up
+    
+    for i, row in enumerate(reversed(R.rows)):
+        # If the row is all 0's, it's a free variable.
+        if not row:
+            x[i] = 1
+        else:
+            #  Perform back substitution
+            val = x[i]
+            for j, e in enumerate(row[-i:], len(row) - i):
+                if e:
+                    val -= e * x[-j - 1]
+            x[i] = val
+    return Vector(reversed(x))
+        
+
+
 @_check_square("Cannot invert non-square Matrix.")
 def invert(A):
     """Returns the inverse of Matrix A. Raises Dimension error if A

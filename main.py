@@ -15,14 +15,13 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        (1, 0, 4),
-        (0, 4, 0),
-        (3, 5, -3)
+        (1, 0, 2),
+        (0, 1, 3),
+        (0, 0, 0)
     )
+    b = Vector(4, 2, 0)
 
-    eigenvalues = mmath.eig(A, precision=0)
-    printm(eigenvalues)
-    printp(mmath.poly(eigenvalues))
+    printf(mmath.solve(A, b))
 
 
 def printm(A):
