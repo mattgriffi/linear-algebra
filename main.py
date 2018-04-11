@@ -14,18 +14,17 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        (1, 0, 0),
-        (0, 1, 0),
-        (0, 0, 1)
+        (5, -2),
+        (4, -1)
     )
-    b = Vector(0, 0, 0)
 
-    R = mmath.rref(mmath.augment(A, b))
-    printf(R)
-    solution, unique = mmath.solve(A, b)
-    print(unique)
-    for v in solution:
-        printf(v)
+    for val, vecs in mmath.eig(A):
+        printe(val, vecs)
+
+
+def printe(eigenvalue, eigenvectors):
+    x = "\t|\t".join(v.str_fractions() for v in eigenvectors)
+    print("eigenvalue: ", eigenvalue, " eigenvectors: ", x)
 
 
 def printm(A):

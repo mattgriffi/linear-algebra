@@ -58,11 +58,26 @@ def nullity(A, is_rref=False):
     return A.dim.columns - rank(A, is_rref)
 
 
-def solve(A, b):
-    """Returns a list of Vectors that form a basis for the solution
-    set of the linear system Ax = b and a boolean showing whether
-    or not there is a unique solution.
+def solve(A, b=None):
+    """Solves the given linear system.
+
+    Parameters
+    ----------
+    A : Matrix
+        The coefficient Matrix of the system.
+    b : Vector, default None
+        The constant Vector. If b is None, the system is
+        assumed to be homogeneous.
+
+    Returns
+    -------
+    list of Vectors
+        The solution set of Ax = b.
+    boolean
+        Whether or not there is a unique solution.
     """
+    if b is None:
+        b = Vector(zero=A.dim.rows)
     R, x = deaugment(rref(augment(A, b)), 1)
     x = list(x)
     m, n = R.dim
@@ -256,14 +271,34 @@ def factor_QR(A):
 
 
 @_check_square("Cannot calculate eigenvalues of non-square Matrix")
-def eig(A, n=10, precision=4):
+def eigval(A, n=10, precision=4):
     """Calculates the eigenvalues of square Matrix A using n iterations
     of the QR algorithm. Returns a Vector of the eigenvalues.
     """
     for _ in range(n):
         Q, R = factor_QR(A)
         A = R * Q
-    return Vector(round(A[i][i], precision) for i in range(A.dim.rows))
+    return Vector(round(A[i][i], precision) for i in range(min(A.dim)))
+
+
+@_check_square("Cannot calculate eigenvectors of non-square Matrix")
+def eigvec(A, eigenvalue):
+    """Calculates the eigenvectors for a given eigenvalue of A. Returns
+    a list of Vectors.
+    """
+    solution, unique = solve(A - eigenvalue * Matrix(identity=A.dim.rows))
+    return solution
+
+
+@_check_square("Cannot calculate eigenvalues of non-square Matrix")
+def eig(A, n=10, precision=4):
+    """Calculates the eigenvalues and eigenvectors of square Matrix A.
+    Returns a generator of tuples: (λ, [u1, u2, ...]). Eigenvalues
+    are calculated with n iteration of the QR algorithm and rounded to
+    precision decimal places.
+    """
+    for eigenvalue in eigval(A, n, precision):
+        yield eigenvalue, eigvec(A, eigenvalue)
 
 
 def poly(eigenvalues):
