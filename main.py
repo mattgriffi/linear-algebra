@@ -1,5 +1,4 @@
-"""
-This program allows for various linear algebra calculations.
+"""This program allows for various linear algebra calculations.
 """
 
 
@@ -15,13 +14,18 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        (1, 0, 2),
-        (0, 1, 3),
-        (0, 0, 0)
+        (1, 0, 0),
+        (0, 1, 0),
+        (0, 0, 1)
     )
-    b = Vector(4, 2, 0)
+    b = Vector(0, 0, 0)
 
-    printf(mmath.solve(A, b))
+    R = mmath.rref(mmath.augment(A, b))
+    printf(R)
+    solution, unique = mmath.solve(A, b)
+    print(unique)
+    for v in solution:
+        printf(v)
 
 
 def printm(A):

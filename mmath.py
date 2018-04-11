@@ -59,23 +59,58 @@ def nullity(A, is_rref=False):
 
 
 def solve(A, b):
+    """Returns a list of Vectors that form a basis for the solution
+    set of the linear system Ax = b and a boolean showing whether
+    or not there is a unique solution.
+    """
     R, x = deaugment(rref(augment(A, b)), 1)
-    x = list(reversed(x))  # Build x from the bottom up
-    
-    for i, row in enumerate(reversed(R.rows)):
-        # If the row is all 0's, it's a free variable.
-        if not row:
-            x[i] = 1
-        else:
-            #  Perform back substitution
-            val = x[i]
-            for j, e in enumerate(row[-i:], len(row) - i):
-                if e:
-                    val -= e * x[-j - 1]
-            x[i] = val
-    return Vector(reversed(x))
-        
+    x = list(x)
+    m, n = R.dim
+    unique = False
 
+    # free_variables holds copies of x with a single free
+    # variable set to 1; one copy for each free variable
+    free_variables = []
+    basis = []
+
+    # Columns without a leading 1 are free variables,
+    # so set the corresponding value in x to 1
+    for c in range(n):
+        r = m - 1
+        # Skip through zeroes at bottom of column
+        while r >= 0 and R[r][c] == 0:
+            r -= 1
+        # Check for leading 1
+        if r < 0 or R[r][c] != 1:
+            y = x[:]
+            y[c] = 1
+            free_variables.append(y)
+    
+    # There were no free variables
+    if not free_variables:
+        free_variables.append(x)
+        unique = True
+
+    # Build the basis vectors
+    for y in free_variables:
+        for r in range(m - 1, -1, -1):
+            # Skip 0 rows
+            if not R[r]:
+                continue
+            c = 0
+            # Get to the leading 1
+            while R[r][c] != 1:
+                c += 1
+            i = c  # i is the index of the variable for this row
+            c += 1  # Skip the leading 1
+            # Use back substitution
+            while c < n:
+                if R[r][c] != 0:
+                    y[i] -= R[r][c] * y[c]
+                c += 1
+        basis.append(Vector(y))
+    return basis, unique
+        
 
 @_check_square("Cannot invert non-square Matrix.")
 def invert(A):
