@@ -78,57 +78,55 @@ def solve(A, b=None):
     """
     if b is None:
         b = Vector(zero=A.dim.rows)
-    R, x = deaugment(rref(augment(A, b)), 1)
-    x = list(x)
+    # Perform rref
+    R, bp = deaugment(rref(augment(A, b)), 1)
+    # Set up x, which is the starting point for back sub
+    x = list(bp)
+    extra_columns = R.dim.columns - R.dim.rows
+    if extra_columns > 0:
+        x += [0] * extra_columns
+
     m, n = R.dim
     unique = False
-
-    # free_variables holds copies of x with a single free
-    # variable set to 1; one copy for each free variable
     free_variables = []
     basis = []
-    good_rows = set()
 
-    # Columns without a leading 1 are free variables,
-    # so set the corresponding value in x to 1
-    for c in range(n):
-        r = m - 1
-        # Skip through zeroes at bottom of column
-        while r >= 0 and R[r][c] == 0:
-            r -= 1
-        # Track which rows have a leading 1
-        if r >= 0 and R[r][c] == 1 and r not in good_rows:
-            good_rows.add(r)
-            print(R[r])
-        elif r < 0 or r in good_rows:
-            print(R[r])
-            y = x[:]
-            y[c] = 1
-            free_variables.append(y)
-    
-    # There were no free variables
+    # Find which columns correspond to free variables and
+    # create vectors in free_variables for them
+    r, c = 0, 0
+    while c < n:
+        if r < m and R[r][c] == 1:
+            r += 1
+            c += 1
+        else:
+            free = x[:]
+            free[c] = 1
+            free_variables.append(free)
+            c += 1
+
     if not free_variables:
         free_variables.append(x)
         unique = True
 
-    # Build the basis vectors
-    for y in free_variables:
-        for r in range(m - 1, -1, -1):
+    # Perform back substitution for each free_variable vector
+    for vec in free_variables:
+        for r in reversed(range(R.dim.rows)):
             # Skip 0 rows
             if not R[r]:
                 continue
-            c = 0
-            # Get to the leading 1
-            while R[r][c] != 1:
-                c += 1
-            i = c  # i is the index of the variable for this row
-            c += 1  # Skip the leading 1
-            # Use back substitution
-            while c < n:
-                if R[r][c] != 0:
-                    y[i] -= R[r][c] * y[c]
-                c += 1
-        basis.append(Vector(y))
+            leading_1_column = None
+            for c in range(R.dim.columns):
+                # If entry is 0, skip column
+                if R[r][c] == 0:
+                    continue
+                # If we have the leading 1, remember and skip it
+                if leading_1_column is None and R[r][c] == 1:
+                    leading_1_column = c
+                    continue
+                # We have a non-zero entry, do the back substitution
+                vec[leading_1_column] -= R[r][c] * vec[c]
+        basis.append(Vector(vec))
+
     return basis, unique
         
 

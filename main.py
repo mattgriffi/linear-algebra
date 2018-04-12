@@ -18,18 +18,14 @@ def main():
         (2, 1, 1),
         (1, 1, 2)
     )
-    I = Matrix(identity=3)
 
     for val, vecs in mmath.eig(A, n=100):
         printe(val, vecs)
     
-    B = A + -4*I
-    printm(mmath.rref(B))
-
 
 def printe(eigenvalue, eigenvectors):
     x = "\n".join(v.str_fractions() for v in eigenvectors)
-    print("eigenvalue: ", eigenvalue, " eigenvectors:\n", x)
+    print("λ: ", eigenvalue, " u:\n", x)
     print()
 
 
