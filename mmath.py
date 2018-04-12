@@ -66,7 +66,7 @@ def solve(A, b=None):
     A : Matrix
         The coefficient Matrix of the system.
     b : Vector, default None
-        The constant Vector. If b is None, the system is
+        The constant Vector. If None, the system is
         assumed to be homogeneous.
 
     Returns
@@ -87,6 +87,7 @@ def solve(A, b=None):
     # variable set to 1; one copy for each free variable
     free_variables = []
     basis = []
+    good_rows = set()
 
     # Columns without a leading 1 are free variables,
     # so set the corresponding value in x to 1
@@ -95,8 +96,12 @@ def solve(A, b=None):
         # Skip through zeroes at bottom of column
         while r >= 0 and R[r][c] == 0:
             r -= 1
-        # Check for leading 1
-        if r < 0 or R[r][c] != 1:
+        # Track which rows have a leading 1
+        if r >= 0 and R[r][c] == 1 and r not in good_rows:
+            good_rows.add(r)
+            print(R[r])
+        elif r < 0 or r in good_rows:
+            print(R[r])
             y = x[:]
             y[c] = 1
             free_variables.append(y)

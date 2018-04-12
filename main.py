@@ -14,12 +14,17 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        (5, -2),
-        (4, -1)
+        (1, 2, 1),
+        (2, 1, 1),
+        (1, 1, 2)
     )
+    I = Matrix(identity=3)
 
-    for val, vecs in mmath.eig(A):
+    for val, vecs in mmath.eig(A, n=100):
         printe(val, vecs)
+    
+    B = A + -4*I
+    printm(mmath.rref(B))
 
 
 def printe(eigenvalue, eigenvectors):
