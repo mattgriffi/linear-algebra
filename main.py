@@ -28,8 +28,9 @@ def main():
 
 
 def printe(eigenvalue, eigenvectors):
-    x = "\t|\t".join(v.str_fractions() for v in eigenvectors)
-    print("eigenvalue: ", eigenvalue, " eigenvectors: ", x)
+    x = "\n".join(v.str_fractions() for v in eigenvectors)
+    print("eigenvalue: ", eigenvalue, " eigenvectors:\n", x)
+    print()
 
 
 def printm(A):
