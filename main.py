@@ -14,14 +14,17 @@ from vector import Vector
 
 def main():
     A = Matrix(
-        (1, 2, 1),
-        (2, 1, 1),
-        (1, 1, 2)
+        (2, 2),
+        (1, 3)
     )
+    P, D = mmath.factor_PD(A, n=100)
+    print("P:")
+    printf(P)
+    print("D:")
+    printf(D)
+    print("P * D * P^-1")
+    printf(P * D * mmath.invert(P))
 
-    for val, vecs in mmath.eig(A, n=100):
-        printe(val, vecs)
-    
 
 def printe(eigenvalue, eigenvectors):
     x = "\n".join(v.str_fractions() for v in eigenvectors)

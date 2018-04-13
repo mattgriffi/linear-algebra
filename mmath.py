@@ -273,6 +273,21 @@ def factor_QR(A):
     return Q, R
 
 
+@_check_square("Cannot factor non-square Matrix.")
+def factor_PD(A, n=10, precision=4):
+    """Returns the P, D factorization of Matrix A. Uses n iterations of
+    the QR algorithm and rounds eigenvalues to precision.
+    """
+    eigenvalues = eigval(A, n, precision)
+    eigenvectors = (eigvec(A, e)[0] for e in eigenvalues)
+    P = Matrix(eigenvectors, columns=True)
+    D = Matrix(
+        (eigenvalues[i] if i == j else 0 for i in range(A.dim.rows))
+        for j in range(A.dim.columns)
+    )
+    return P, D
+
+
 @_check_square("Cannot calculate eigenvalues of non-square Matrix")
 def eigval(A, n=10, precision=4):
     """Calculates the eigenvalues of square Matrix A using n iterations
@@ -281,7 +296,7 @@ def eigval(A, n=10, precision=4):
     for _ in range(n):
         Q, R = factor_QR(A)
         A = R * Q
-    return Vector(round(A[i][i], precision) for i in range(min(A.dim)))
+    return Vector(sorted(round(A[i][i], precision) for i in range(min(A.dim))))
 
 
 @_check_square("Cannot calculate eigenvectors of non-square Matrix")
